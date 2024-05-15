@@ -3,12 +3,19 @@
 // LVGL version: 8.3.11
 // Project name: SquareLine_Project
 
-#ifndef _UI_EVENTS_H
-#define _UI_EVENTS_H
+#ifndef _UI_COMP_TEXTAREA2_H
+#define _UI_COMP_TEXTAREA2_H
+
+#include "../ui.h"
 
 #ifdef __cplusplus
 extern "C" {
 #endif
+
+// COMPONENT TextArea2
+#define UI_COMP_TEXTAREA2_TEXTAREA2 0
+#define _UI_COMP_TEXTAREA2_NUM 1
+lv_obj_t * ui_TextArea2_create(lv_obj_t * comp_parent);
 
 #ifdef __cplusplus
 } /*extern "C"*/
