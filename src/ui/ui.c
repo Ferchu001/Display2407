@@ -14,10 +14,14 @@ void Cambia_Animation(lv_obj_t * TargetObject, int delay);
 void ui_Screen1_screen_init(void);
 void ui_event_Screen1(lv_event_t * e);
 lv_obj_t * ui_Screen1;
-lv_obj_t * ui_Label1;
-lv_obj_t * ui_Label2;
-lv_obj_t * ui_Label3;
-lv_obj_t * ui_Label4;
+lv_obj_t * ui_Fondo1;
+lv_obj_t * ui_Menu1;
+lv_obj_t * ui_Fondo2;
+lv_obj_t * ui_Menu2;
+lv_obj_t * ui_Fondo3;
+lv_obj_t * ui_Menu3;
+lv_obj_t * ui_Fondo4;
+lv_obj_t * ui_Menu4;
 
 
 // SCREEN: ui_Screen2

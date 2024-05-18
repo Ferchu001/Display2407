@@ -22,10 +22,14 @@ void Cambia_Animation(lv_obj_t * TargetObject, int delay);
 void ui_Screen1_screen_init(void);
 void ui_event_Screen1(lv_event_t * e);
 extern lv_obj_t * ui_Screen1;
-extern lv_obj_t * ui_Label1;
-extern lv_obj_t * ui_Label2;
-extern lv_obj_t * ui_Label3;
-extern lv_obj_t * ui_Label4;
+extern lv_obj_t * ui_Fondo1;
+extern lv_obj_t * ui_Menu1;
+extern lv_obj_t * ui_Fondo2;
+extern lv_obj_t * ui_Menu2;
+extern lv_obj_t * ui_Fondo3;
+extern lv_obj_t * ui_Menu3;
+extern lv_obj_t * ui_Fondo4;
+extern lv_obj_t * ui_Menu4;
 // SCREEN: ui_Screen2
 void ui_Screen2_screen_init(void);
 void ui_event_Screen2(lv_event_t * e);

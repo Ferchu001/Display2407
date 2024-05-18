@@ -13,6 +13,13 @@
 #define APP_DISP_DEFAULT_BRIGHTNESS 50
 
 /*******************************************************************************
+* external functions
+*******************************************************************************/
+extern char check_teclado(void);
+extern void mnu_select(char Tecla);
+extern void mnu_show(void);
+extern void reset_variables(void);
+/*******************************************************************************
 * Private functions
 *******************************************************************************/
 void check_rx_commands(void);
@@ -37,7 +44,9 @@ void setup()
     auto disp = lv_disp_get_default();
     lv_disp_set_rotation(disp, LV_DISP_ROT_90);
     ui_init();
-    Serial2.begin(115200, SERIAL_8N1, GPIO_NUM_22, GPIO_NUM_27);
+    reset_variables();
+    mnu_show();
+//    Serial2.begin(115200, SERIAL_8N1, GPIO_NUM_22, GPIO_NUM_27);
 }
 void Led(void)
 {
@@ -55,13 +64,11 @@ void Led(void)
 
 void loop()
 {
+    char Tecla;
     Led();
     check_rx_commands();
     if (Display.Change == true)
     {
-
-        //
-        // lv_label_set_text_fmt(ui_Precio, "$ %d", Sec++);
 
         switch (Display.Actual)
         {
@@ -81,6 +88,12 @@ void loop()
         Display.Change = false;
         Serial.println("Cambio a Display: " + String(Display.Actual));
     }
+    Tecla=check_teclado();
+    if(Tecla!=0)
+        {
+        mnu_select(Tecla);
+        }
+        
     lv_timer_handler();
 }
 /***************************Comandos*********************/
