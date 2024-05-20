@@ -8,9 +8,10 @@ SET(SOURCES components/ui_comp_label2.c
     components/ui_comp_hook.c
     ui_helpers.c
     ui_events.c
-    fonts/ui_font_OpenSans16bpp1.c
-    fonts/ui_font_OpenSans48bpp1.c
-    fonts/ui_font_OpenSans84bpp1.c
-    fonts/ui_font_OpenSans96bpp1.c)
+    fonts/ui_font_OpenSansCSB42.c
+    fonts/ui_font_OpenSansCSB48.c
+    fonts/ui_font_OpenSansCSB96.c
+    fonts/ui_font_OpenSans102.c
+    fonts/ui_font_OpenSans52.c)
 
 add_library(ui ${SOURCES})

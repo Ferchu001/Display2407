@@ -3,6 +3,8 @@
 #include "change_log.h"
 #include "menu_items.h"
 
+#define TIEMPO_PARPADEA_EDICION 500
+
 #define TAM_VAR_TXT 22
 
 #define CAPACIDAD_CISTERNA   30000

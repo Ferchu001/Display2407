@@ -51,10 +51,11 @@ extern lv_obj_t * ui____initial_actions0;
 
 
 
-LV_FONT_DECLARE(ui_font_OpenSans16bpp1);
-LV_FONT_DECLARE(ui_font_OpenSans48bpp1);
-LV_FONT_DECLARE(ui_font_OpenSans84bpp1);
-LV_FONT_DECLARE(ui_font_OpenSans96bpp1);
+LV_FONT_DECLARE(ui_font_OpenSansCSB42);
+LV_FONT_DECLARE(ui_font_OpenSansCSB48);
+LV_FONT_DECLARE(ui_font_OpenSansCSB96);
+LV_FONT_DECLARE(ui_font_OpenSans102);
+LV_FONT_DECLARE(ui_font_OpenSans52);
 
 
 

@@ -9,6 +9,9 @@
 #include <esp32_smartdisplay.h>
 #include <ui/ui.h>
 
+#include "menu.h"
+
+
 #define TAG "ESP-EXAMPLE"
 #define APP_DISP_DEFAULT_BRIGHTNESS 50
 
@@ -19,11 +22,25 @@ extern char check_teclado(void);
 extern void mnu_select(char Tecla);
 extern void mnu_show(void);
 extern void reset_variables(void);
+
+/*******************************************************************************
+* external variables
+*******************************************************************************/
+extern edicion mnu_edicion;
+
+
 /*******************************************************************************
 * Private functions
 *******************************************************************************/
 void check_rx_commands(void);
-ulong next_millis;
+
+/*******************************************************************************
+* Private variables
+*******************************************************************************/
+ulong next_millis=0;
+ulong Timer_panRefresh=0;
+#define TIME_REFRESH_PAN 100 //ms
+
 struct Dis
 {
     int Actual = 0;
@@ -45,6 +62,7 @@ void setup()
     lv_disp_set_rotation(disp, LV_DISP_ROT_90);
     ui_init();
     reset_variables();
+
     mnu_show();
 //    Serial2.begin(115200, SERIAL_8N1, GPIO_NUM_22, GPIO_NUM_27);
 }
@@ -93,6 +111,8 @@ void loop()
         {
         mnu_select(Tecla);
         }
+        if(mnu_edicion.item_ON==true && millis()>mnu_edicion.ms_parpadea+TIEMPO_PARPADEA_EDICION)    
+            mnu_show();
         
     lv_timer_handler();
 }
