@@ -10,18 +10,25 @@ void mnu_show(void);
 
 int mnu_busca_nextNivel(int item);
 int mnu_busca_BackNivel(int item);
+int mnu_busca_Nivel(int Nivel);
 int mnu_Nxt_item(void);
 int mnu_Prev_item(void);
 void mnu_cambio_menu(int New_item);
+char mnu_validar_password(char password[]);
+
 
 int mnu_item_actual=0;
+int mnu_item_back=0;
 
 edicion mnu_edicion;
 
 
 
+
+
 int pan_primer_item=0;//Contiene el primer item a mostrar en Pantalla
-char Item_Seleccionado=0;
+int pan_primer_item_back=0;
+//char Item_Seleccionado=0;
 
 /*****************Externas ***********************************/
 extern signed short variables_short[MNU_TAM_VAR_SHORT];
@@ -68,6 +75,7 @@ for (int i = 0; i < sizeof(menu) / sizeof(menu[0]); i++)
             {                
             case TIPO_TXT_SM_ML:
             case TIPO_TXT_SM_SL:
+            case TIPO_PASSWORD_SL:
                 TotPan+=2;                
                 break;
             default:
@@ -125,10 +133,18 @@ for(k=pan_primer_item,j=0;j<MAX_ITEMS_PAN && k<Cant_Items_Nivel ;k++,j++)
                 strncpy(pan_Etiquetas[j+1],variables_txt[menu[Items_Nivel[k]].Variable_Asoc],TAM_VAR_TXT - 1);                
                 }
             j++;
-            //Si esta en edicion titilar el cursor
+            
             pan_alin[j]=LV_ALIGN_TOP_RIGHT;
             pan_txt[j]=TXT_42;
         break;
+        case TIPO_PASSWORD_SL:
+            strncpy(pan_Etiquetas[j+1],"****************",4);//mnu_edicion.pos_digito);
+            Serial.printf("mnu_edicion.pos_digito : %d\n",mnu_edicion.pos_digito);
+            pan_Etiquetas[j+1][4]='\0';
+            j++;
+            Cant_Items_Nivel=2;
+            pan_alin[j]=LV_ALIGN_TOP_RIGHT;
+            pan_txt[j]=TXT_42;
         default:
         break;
         }
@@ -271,29 +287,30 @@ void mnu_select(char Tecla)
 {
 int mnu_prov;
 //Busca si se presiono una tecla rapida
-if(Tecla>='1' && Tecla<='9')
-    for(int i=0;i<sizeof(menu) / sizeof(menu[0]); i++)
+if(Tecla>='0' && Tecla<='9' )
+    if(mnu_edicion.item_ON==false)
         {
-        if(menu[i].Nivel==menu[mnu_item_actual].Nivel && menu[i].Tecla_Rapida==Tecla)
+        for(int i=0;i<sizeof(menu) / sizeof(menu[0]); i++)
             {
-            mnu_cambio_menu(mnu_busca_nextNivel(i));
+            if(menu[i].Nivel==menu[mnu_item_actual].Nivel && menu[i].Tecla_Rapida==Tecla)
+                {
+                mnu_cambio_menu(mnu_busca_nextNivel(i));
+                }
             }
         }
-    switch(menu[mnu_item_actual].Tipo)
-        {
-        case TIPO_TXT_SM_ML:
-        case TIPO_TXT_SM_SL:
-            if(Tecla>='0' && Tecla<='9' && mnu_edicion.item_ON==true)
-                {
+    else
+        switch(menu[mnu_item_actual].Tipo)
+            {
+            case TIPO_TXT_SM_ML:
+            case TIPO_TXT_SM_SL:
+            case TIPO_PASSWORD_SL:
                 mnu_edicion.str_dato[mnu_edicion.pos_digito]=Tecla;
                 if(++mnu_edicion.pos_digito>=menu[mnu_item_actual].Cant_digitos)
                     {
                     mnu_edicion.pos_digito=menu[mnu_item_actual].Cant_digitos-1;                
                     }
-                }
-        break;
-        }
-
+                break;
+            }
 
 switch(Tecla)
     {
@@ -312,36 +329,74 @@ switch(Tecla)
                 mnu_edicion.pos_digito=0;
                 break;
             default:
-                if(menu[mnu_item_actual].Nivel_Next==ID_NXT_ITEM )
+                switch(menu[mnu_item_actual].Nivel_Next)
                     {
-                    mnu_cambio_menu(mnu_Nxt_item());
+                    case ID_NXT_ITEM:
+                        mnu_cambio_menu(mnu_Nxt_item());
+                        break;
+                    case ID_PASSWORD:                        
+                        mnu_edicion.digito_ON=false;
+                        mnu_edicion.item_ON=true;
+                        mnu_edicion.ms_parpadea = millis();
+                        mnu_edicion.pos_digito=0;
+                        strcpy(mnu_edicion.str_dato,"");
+                        mnu_cambio_menu(mnu_busca_nextNivel(mnu_item_actual));
+                        break;
+                    default:
+                        if(menu[mnu_item_actual].Nivel_Next!=ID_VOID)
+                            {
+                            pan_primer_item=0;//Si no se esta en edicion
+                            mnu_cambio_menu(mnu_busca_nextNivel(mnu_item_actual));
+                            if(menu[mnu_item_actual].Nivel==ID_PASSWORD )
+                                {
+                                mnu_edicion.item_ON=true;
+                                }
+                            }
+                        break;
                     }
-                else
-                if(menu[mnu_item_actual].Nivel_Next!=ID_VOID)
-                    {
-                    pan_primer_item=0;//Si no se esta en edicion
-                    mnu_cambio_menu(mnu_busca_nextNivel(mnu_item_actual));
-                    }
+                break;
             }
         }
     else //Editando variable
         {//Guardar Variable editada
         mnu_edicion.item_ON=false;
-        strncpy(variables_txt[menu[mnu_item_actual].Variable_Asoc],mnu_edicion.str_dato,TAM_VAR_TXT-1);
+        if(menu[mnu_item_actual].Nivel ==  ID_PASSWORD)
+            {
+            if(mnu_validar_password(mnu_edicion.str_dato))
+                mnu_cambio_menu(mnu_busca_Nivel(ID_PARAMETROS));
+            else
+                {
+                Serial.print("Password : ");
+                Serial.println(variables_txt[TXT_PASSWORD_MEM_1]);
+                Serial.print("Ingresado : ");                
+                Serial.println(mnu_edicion.str_dato);
+                mnu_cambio_menu(mnu_busca_BackNivel(mnu_item_actual));
+                }
+            }
+        else
+            strncpy(variables_txt[menu[mnu_item_actual].Variable_Asoc],mnu_edicion.str_dato,TAM_VAR_TXT-1);
         }
         break;
     case 'S': //Stop
     case 's': //Stop
-        if(mnu_edicion.item_ON==true)
+        if(menu[mnu_item_actual].Nivel_Back==ID_MEMORIA)
             {
-            mnu_edicion.item_ON=false;
+                pan_primer_item=pan_primer_item_back;
+                mnu_cambio_menu(mnu_item_back);
             }
         else
             {
-            if(menu[mnu_item_actual].Nivel_Back!=ID_VOID)
+            if(mnu_edicion.item_ON==true)
                 {
-                pan_primer_item=0;//Si no se esta en edicion
-                mnu_cambio_menu(mnu_busca_BackNivel(mnu_item_actual));
+                mnu_edicion.item_ON=false;
+                }
+            else
+                {
+                if(menu[mnu_item_actual].Nivel_Back!=ID_VOID)
+                    {
+                    pan_primer_item=0;//Si no se esta en edicion
+                    mnu_cambio_menu(mnu_busca_BackNivel(mnu_item_actual));
+                    }
                 }
             }
         break;
@@ -350,6 +405,10 @@ switch(Tecla)
         break;
     case 'F': // Funcion
     case 'f':
+    //No se puede llamar a la funcion en el medio de una carga
+        mnu_item_back= mnu_item_actual;
+        pan_primer_item_back=pan_primer_item;
+        mnu_cambio_menu(mnu_busca_Nivel(ID_FUNCIONES));
         break;
     case 'U': //UP
     case 'u':
@@ -359,7 +418,6 @@ switch(Tecla)
                 {
                 mnu_edicion.pos_digito=menu[mnu_item_actual].Cant_digitos-1;                
                 }
-            Serial.printf("mnu_edicion.pos_digito :  %d \n",mnu_edicion.pos_digito);
             }
         else
             {
@@ -375,8 +433,7 @@ switch(Tecla)
         if(mnu_edicion.item_ON==true)
             {            
             if(mnu_edicion.pos_digito>0)
-                mnu_edicion.pos_digito--;
-//            Serial.printf("mnu_edicion.pos_digito :  %d \n",mnu_edicion.pos_digito);                
+                mnu_edicion.pos_digito--;           
             }
         else
             {
@@ -422,6 +479,16 @@ for(int i=0;i<sizeof(menu) / sizeof(menu[0]); i++)
 return 0; // No encontro ningun item que tenga eso para el proximo nivel
 }
 
+int mnu_busca_Nivel(int Nivel)
+{
+for(int i=0;i<sizeof(menu) / sizeof(menu[0]); i++)
+    {
+    if(menu[i].Nivel==Nivel)
+        return i;// Busca el primero de la lista
+    }
+return 0; // No encontro ningun item que tenga eso para el proximo nivel
+}
+
 int mnu_Nxt_item(void)
 {
 for(int i=mnu_item_actual+1;i<sizeof(menu) / sizeof(menu[0]); i++)
@@ -455,4 +522,17 @@ mnu_edicion.item_ON=false;
 mnu_show();
 //Ejecutar Pre_Proceso
 Serial.printf("Item_Actual: %d \n",mnu_item_actual);
+}
+
+
+char mnu_validar_password(char password[])
+{
+
+  if(strcmp(password,variables_txt[TXT_PASSWORD_MEM_1]))
+    {
+        return 1;
+    }
+      else
+      return 0;
+// mnu_msgbox(MSG_INVALIDO, MNU_MSGBOX_CUALQUIER);
 }

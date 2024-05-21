@@ -149,13 +149,13 @@ const char variables_txt_default[][TAM_VAR_TXT]={
 	"7000",              //TXT_UNIDAD          3
 	"54321",              //TXT_CUENTA          4
 	"------",             //TXT_RECORRIDO       5
-	"1",                  //TXT_PASSWORD_NIVEL_1  6
-	"",                   //TXT_VERSION_DISPLAY   7
-	"",                   //TXT_SERIE_DISPLAY     8
-	"",                   //TXT_FECHA_DISPLAY     9
-	"",                   //TXT_VERSION_CAUDALIM  10
-	"",                   //TXT_SERIE_CAUDALIM    11
-	"",                   //TXT_FECHA_CAUDALIM    12
+	"",                   //TXT_VERSION_DISPLAY   6
+	"",                   //TXT_SERIE_DISPLAY     7
+	"",                   //TXT_FECHA_DISPLAY     8
+	"",                   //TXT_VERSION_CAUDALIM  9
+	"",                   //TXT_SERIE_CAUDALIM    10
+	"",                //TXT_FECHA_CAUDALIM    11
+	"1234",                  //TXT_PASSWORD_NIVEL_1 12 
 	"2",                  //TXT_PASSWORD_NIVEL_2  13
 	"3",                  //TXT_PASSWORD_NIVEL_3  14
         "000000000000",       //TXT_SERIE_CABEZAL     15
