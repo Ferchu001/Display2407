@@ -111,8 +111,11 @@ void loop()
         {
         mnu_select(Tecla);
         }
-        if(mnu_edicion.item_ON==true && millis()>mnu_edicion.ms_parpadea+TIEMPO_PARPADEA_EDICION)    
-            mnu_show();
+    if(mnu_edicion.item_ON==true && millis()>mnu_edicion.ms_parpadea+TIEMPO_PARPADEA_EDICION)  
+        {
+        //mnu_edicion.ms_parpadea=millis();
+        mnu_show();        
+        }
         
     lv_timer_handler();
 }

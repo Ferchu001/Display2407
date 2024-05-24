@@ -2,11 +2,13 @@
 #include "menu_tabla.h"
 #include <Arduino.h>
 
-signed short variables_short[MNU_TAM_VAR_SHORT];
+int variables_short[MNU_TAM_VAR_SHORT];
 
 signed short variables_short_iot[MNU_TAM_VAR_SHORT_IOT];
 char variables_txt[MNU_TAM_VAR_TXT][TAM_VAR_TXT];
 float variables_float[MNU_TAM_VAR_FLOAT];
+
+long variables_bit=0x00;
 
 void reset_variables(){
     int i;

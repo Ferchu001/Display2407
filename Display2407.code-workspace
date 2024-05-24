@@ -8,7 +8,8 @@
 		"files.associations": {
 			"*.embeddedhtml": "html",
 			"*.json": "json",
-			"ui_comp.h": "c"
+			"ui_comp.h": "c",
+			"sstream": "cpp"
 		}
 	}
 }

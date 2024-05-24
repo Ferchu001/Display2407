@@ -19,6 +19,7 @@
 #define LIMITE_DEFAULT 2
 #define MAX_SIGNED_SHORT 32767
 #define MIN_SIGNED_SHORT -32767
+const char PASSWORD_FIX[]="20972098";
 
 const float variables_float_limites[MNU_TAM_VAR_FLOAT][3]=
 {
@@ -63,7 +64,7 @@ const float variables_float_limites[MNU_TAM_VAR_FLOAT][3]=
     -500000,500000,0, //FLOAT_VOLUMEN_TOTAL
 };
 
-const signed short variables_short_limites[MNU_TAM_VAR_SHORT][3]=
+const int variables_short_limites[MNU_TAM_VAR_SHORT][3]=
 {
 	//MIN,  MAX,    DEFAULT,
 	1,     5,        1,        //cisterna de destino
@@ -129,14 +130,14 @@ const signed short variables_short_limites[MNU_TAM_VAR_SHORT][3]=
 	0,     99,       0,            //SHORT_DB_CONTADOR_RUTA
 	0,     32000,      VERSION_FIRMWARE,            //Version Firmware
 	MIN_SIGNED_SHORT,MAX_SIGNED_SHORT,0,                     //temperatura interna del texas
-        0,MAX_SIGNED_SHORT,5000,         //SHORT_CAUDAL_MINIMO_TOMAMUESTRA
-        0,MAX_SIGNED_SHORT,5000,         //SHORT_CAUDAL_CERO_UMBRAL
-        0,16,0,         //SHORT_CANT_DIG_REMITO //Si esta en 0 se habilita cualquier cantidad
+	0,MAX_SIGNED_SHORT,5000,         //SHORT_CAUDAL_MINIMO_TOMAMUESTRA
+	0,MAX_SIGNED_SHORT,5000,         //SHORT_CAUDAL_CERO_UMBRAL
+	0,16,0,         //SHORT_CANT_DIG_REMITO //Si esta en 0 se habilita cualquier cantidad
 	0,     999,      1,        //(mseg) logitud del pulso (ON) del tomamuestra
 	0,     999,      1,        //(mseg) logitud del pulso (OFF) del tomamuestra
-        0,16,0, //SHORT_CANT_DIG_TAMBO
-        1,2,1,  //Vector_Nivel del Desaireador 
-        0,5,0    //SHORT_OBS_TAMBO
+	0,16,0, //SHORT_CANT_DIG_TAMBO
+	1,2,1,  //Vector_Nivel del Desaireador 
+	0,5,0    //SHORT_OBS_TAMBO
         //0,0,0   //No usar 
 };
 
@@ -155,13 +156,13 @@ const char variables_txt_default[][TAM_VAR_TXT]={
 	"",                   //TXT_VERSION_CAUDALIM  9
 	"",                   //TXT_SERIE_CAUDALIM    10
 	"",                //TXT_FECHA_CAUDALIM    11
-	"1234",                  //TXT_PASSWORD_NIVEL_1 12 
+	"3",                  //TXT_PASSWORD_NIVEL_1 12 
 	"2",                  //TXT_PASSWORD_NIVEL_2  13
 	"3",                  //TXT_PASSWORD_NIVEL_3  14
         "000000000000",       //TXT_SERIE_CABEZAL     15
         "CARGAR        ",    //TXT_NOMBRE_RENGLON_1  16
         "NOMBRE      ",     //TXT_NOMBRE_RENGLON_2  17
-	"000000000000",        //TXT_BT_ADDRESS 18  Direccion del dispositivo BLuetoooth para transferir archivo
+		"000000000000",        //TXT_BT_ADDRESS 18  Direccion del dispositivo BLuetoooth para transferir archivo
         "000000000000", //Nro Serie Equipo 19
         "00",                   //TXT_NUM_LINEA 20
         "0000000000000000",//TXT_MUESTRA 21
@@ -173,7 +174,9 @@ const char variables_txt_default[][TAM_VAR_TXT]={
         "",//TXT_IOT_MAC
         "",//TXT_IOT_GPRS_POW 
         "",//GPS
-        ""//STATUS
+        "",//STATUS
+		"16:21:04",
+		"24-05-24"
 };
 
 

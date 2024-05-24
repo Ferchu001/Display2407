@@ -36,8 +36,10 @@
 #define TXT_IOT_GPRS_POW 28
 #define TXT_IOT_GPS 29
 #define TXT_IOT_STATUS 30
+#define TXT_HORA 31
+#define TXT_FECHA 32
 
-#define MNU_TAM_VAR_TXT 31 // OJO *********************************************Modificar este cada vez que se agrega una variable
+#define MNU_TAM_VAR_TXT 33 // OJO *********************************************Modificar este cada vez que se agrega una variable
 
 #define SHORT_ELEC_MEMORIA_CIST 0 // puede valer 1,2 o 3 (dependiendo si es compartimento ABC)
 #define SHORT_ELECCION_ORIGEN 1   // idem anterior, pero se usa solo en trasvase para indicar la cisterna de origen
@@ -162,40 +164,23 @@
 #define FECHA_FIN_RECEP 4      // idem fin
 #define MNU_TAM_VAR_FECHA 5    // OJO   *********************************************Modificar este cada vez que se agrega una variable
 
-#define BIT_CISTERNA 0      // indica si la cisterna esta encendida
-#define BIT_VALVULA_DESAI 1 // Activa la valvula de escape del degasificador
-#define BIT_TOMA_MUESTRA 2  // activa el piston tomamuestra
-// #define BIT_SANCOR                3   //Indica que tiene que usar todo en Modo SANCOR.
-#define BIT_PUNTA_DEL_AGUA 3
-#define BIT_TOMA_MUESTRA2 4          // Control Tomamuestras 2
-#define BIT_BT_CEL 5                 // Activa la nueva transmision por Bluetooth para el celular.
-#define BIT_INVERSION_CAUDALIMETRO 6 // le indica al caudalimetro quE se le esta dando bola a los valores de volumen y caudal (esto se pone en cero para que el caudalimetro haga tareas de housekeeping)
-#define BIT_NO_ACTUALIZAR_VOL 7      // mientras este bit este en uno el caudalimetro no va a medir volumen ni caudal (esto es para que no haga locuras cuando tiene los electrodos al aire)
-#define BIT_PUERTA_DESHAB 8          // indica si esta deshabilitada la deteccion de puerta abierta en la impresora
-#define BIT_PAPEL_DESHAB 9           // indica si esta deshabilitada la deteccion de papel en la impresora
-#define BIT_TEMP_DESHAB 10           // indica si esta deshabilitada la deteccion de temperatura alta en la impresora
-#define BIT_IMP_DESCONECTAR 11       // indica que la impresora esta desconectada y no debe usarse
-#define BIT_DISPLAY_NUEVO 12         // Display Blanco (Esto corre el offset lateral del display
-#define BIT_BLUETOOTH_SERVICE 13     // si esta en si, se habilita la conexion bluetooth para recolectar datos
-#define BIT_IMPRIMIR_CIP 14          // indica si se imprime el tiket de limpieza
-#define BIT_ERROR_COMM 15            // indica que hay error de comunicacion con el caudalimetro
-#define BIT_LLAVE 16                 // chamuyo para hacer andar bien un cacho de codigo
-#define BIT_ECOLAT 17                // indica que debe usar las opciones de ECOLAT
-#define BIT_INDICA_RECEPCION 18      // este bit se usa para debuguear con el programa bt_service, lo que hace es indicar cuando se esta en una recepcion y cuando termina
-#define BIT_MANUAL 19                // indica si la bomba esta en modo manual (si = 0 entonces es automatica)
-#define BIT_CAUD_SATURA_ADC_MAX 20   // indica que saturo el ADC del caudalimetro
-#define BIT_CAUD_SATURA_ADC_MIN 21   // indica que saturo el ADC del caudalimetro
-#define BIT_GPRS_ON 22               // indica si el GPRS esta encendido
-#define BIT_BEEPER_ON 23             // indica si debe sonar el beeper
-#define BIT_DECIMAL_EN_CARGA 24      // indica si se muestra un digito decimal en la pantalla de carga(por default, no)
-// #define BIT_BLUETOOTH_ON          25
-#define BIT_ELIGE_IMP 25
-#define BIT_LECTOR_BARRAS_ON 26
-#define BIT_IMPRIMIR_INFOS_7XXX 27   // indica si se imprimen o no los codigos de error 7xxx
-#define BIT_BORRAR_BASE_RECORRIDO 28 // indica si la base de datos se borra al comienzo de cada recorrido o no
-#define BIT_BORRAR_BASE_TRANS 29     // indica si la base de datos se borra despues de una transmision exitosa*/
-#define BIT_CONTROL_AUTO 30          // indica que el control de la carga de IO es automatico
-#define BIT_BORRAR_BASE_PEN_DRIVE 31 // si esta en "si" indica que al terminar de descargar los datos al pen drive se pueden borrar los datos locales
+#define BIT_TOMA_MUESTRA 0 // activa el piston tomamuestra
+#define BIT_INVERSION_CAUDALIMETRO 1 // le indica al caudalimetro quE se le esta dando bola a los valores de volumen y caudal (esto se pone en cero para que el caudalimetro haga tareas de housekeeping)
+#define BIT_NO_ACTUALIZAR_VOL  2      // mientras este bit este en uno el caudalimetro no va a medir volumen ni caudal (esto es para que no haga locuras cuando tiene los electrodos al aire)
+#define BIT_PUERTA_DESHAB 3          // indica si esta deshabilitada la deteccion de puerta abierta en la impresora
+#define BIT_PAPEL_DESHAB 4           // indica si esta deshabilitada la deteccion de papel en la impresora
+#define BIT_TEMP_DESHAB 5           // indica si esta deshabilitada la deteccion de temperatura alta en la impresora
+#define BIT_IMP_DESCONECTAR 6       // indica que la impresora esta desconectada y no debe usarse
+#define BIT_IMPRIMIR_CIP 7          // indica si se imprime el tiket de limpieza
+#define BIT_MANUAL 8                // indica si la bomba esta en modo manual (si = 0 entonces es automatica)
+#define BIT_GPRS_ON 9               // indica si el GPRS esta encendido
+#define BIT_DECIMAL_EN_CARGA 10      // indica si se muestra un digito decimal en la pantalla de carga(por default, no)
+#define BIT_ELIGE_IMP 11
+#define BIT_LECTOR_BARRAS_ON 12
+#define BIT_IMPRIMIR_INFOS_7XXX 13   // indica si se imprimen o no los codigos de error 7xxx
+#define BIT_BORRAR_BASE_RECORRIDO 14 // indica si la base de datos se borra al comienzo de cada recorrido o no
+#define BIT_BORRAR_BASE_TRANS 15     // indica si la base de datos se borra despues de una transmision exitosa*/
+#define BIT_CONTROL_AUTO 16          // indica que el control de la carga de IO es automatico
 
 //------------------------------------------------
 
@@ -241,7 +226,7 @@
 #define TIPO_FECHA_NM_SL 29 // campo de fecha completa modificable en la siguiente linea el campo parametro indica la posicion en la matriz de variables fecha que le corresponde
 
 #define TIPO_HORA_SM_SL 30   // campo de hora completa modificable en la siguiente linea el campo parametro indica la posicion en la matriz de variables fecha que le corresponde
-#define TIPO_FECHA2_SM_SL 31 // muestra solo la fecha (no la hora), modificable en la siguiente linea
+#define TIPO_FECHA_SM_SL 31 // muestra solo la fecha (no la hora), modificable en la siguiente linea
 #define TIPO_HORA_NM_SL 32   // campo de hora completa no modificable en la siguiente linea el campo parametro indica la posicion en la matriz de variables fecha que le corresponde
 #define TIPO_FECHA2_NM_SL 33 // muestra solo la fecha (no la hora), no modificable en la siguiente linea
 
