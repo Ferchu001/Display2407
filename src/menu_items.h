@@ -19,7 +19,7 @@
 #define TXT_FECHA_CAUDALIM 11   // fecha en la que se edito el numero de serie del caudalimetro
 #define TXT_PASSWORD_MEM_1 12      // password almacendado en memoria
 #define TXT_PASSWORD_INGRESADO 13 //password ingresado por teclado para chequear si coincide con TXT_PASSWORD_MEM
-#define TXT_PASSWORD_NIVEL_3 14 //
+#define TXT_PASSWORD_NIVEL_1 14 //
 #define TXT_SERIE_CABEZAL 15    // en este campo se guarda el numero de serie del cabezal que se utiliza con el caudalimetro
 #define TXT_NOMBRE_RENGLON_1 16
 #define TXT_NOMBRE_RENGLON_2 17
@@ -314,6 +314,8 @@
 
 //---------ID de los menus (los define van de 5 en 5)!!!!--------------------
 //#define ID_ROOT 245      // item raiz a partir del cual se muestran los otros
+#define ID_NXT_ITEM 7
+#define ID_BACK_ITEM 8
 #define ID_PRINCIPAL 1 // menu principal, nivel de seguridad 0
 #define ID_CIP       2 // codigo de numero de acoplado, imprimir tiket de inicio
 #define ID_RECORRIDO_D 3   // pantalla de ingreso de remito, manual o automatico con el lector de codigo
@@ -338,7 +340,7 @@
 #define ID_TRANS_ORIGEN_2 36 // elige cisterna de origen para transvase
 
 #define ID_TRANS_DESTINO_DUMMY 40
-#define ID_TRANS_DESTINO_3 42 // elige cisterna de origen para transvase
+#define ID_TRANS_DESTINO 42 // elige cisterna de origen para transvase
 #define ID_TRANS_DESTINO_4 43 // elige cisterna de origen para transvase
 #define ID_TRANS_DESTINO_5 44 // elige cisterna de origen para transvase
 
@@ -404,7 +406,10 @@
 #define ID_TRASBORDO 220
 #define ID_TAMBO_OBS 225
 
-#define ID_MAX 12
+#define ID_PANTALLA_CARGA 230
+#define ID_PAN_IO   231
+
+//#define ID_MAX 12
 #define ID_VOID 255 // no tiene submenu
 #define ID_NADA 250 // cuando el menu_padre es igual a ID_NADA no se dibuja en pantalla (esto es para que dibuje otra funcion)
 
