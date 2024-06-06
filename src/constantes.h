@@ -179,5 +179,23 @@ const char variables_txt_default[][TAM_VAR_TXT]={
 		"24-05-24"
 };
 
+const long variables_bits_default=0;
+
+
+struct Var{
+int vshort[MNU_TAM_VAR_SHORT];
+signed short viot[MNU_TAM_VAR_SHORT_IOT];
+char vtxt[MNU_TAM_VAR_TXT][TAM_VAR_TXT];
+float vfloat[MNU_TAM_VAR_FLOAT];
+
+long vbit=0x00;
+};
+
+
+#define FECHA_ACTUAL              0   //fecha y hora actual
+#define FECHA_ARRANQUE            1   //hora de arranque
+#define FECHA_FIN                 2   //hora de finalizacion
+#define FECHA_ARRANQUE_RECEP      3   //fecha de arranque de la recepcion
+#define FECHA_FIN_RECEP           4   //idem fin
 
 #endif

@@ -27,11 +27,10 @@ int pan_primer_item_back=0;
 //char Item_Seleccionado=0;
 
 /*****************Externas ***********************************/
-extern int variables_short[MNU_TAM_VAR_SHORT];
-extern char variables_txt[MNU_TAM_VAR_TXT][TAM_VAR_TXT];
-extern signed short variables_short_iot[MNU_TAM_VAR_SHORT_IOT];
-extern float variables_float[MNU_TAM_VAR_FLOAT];
-extern long variables_bit;
+extern struct Var variables;
+
+extern void save_variables(const char* path);
+
 /************************************************************/
 
 #define MAX_ITEMS_PAN 4
@@ -66,10 +65,10 @@ for (int i = 0; i < sizeof(menu) / sizeof(menu[0]); i++)
         Items_Nivel[k]=i;
         if(i==mnu_item_actual)
             {
-            Serial.print(">>");
+            //Serial.print(">>");
             pan_item_sel=k;
             }
-        Serial.println(menu[i].Etiqueta);
+   //     Serial.println(menu[i].Etiqueta);
         switch(menu[Items_Nivel[j]].Tipo)
             {                
             case TIPO_TXT_SM_ML:
@@ -103,7 +102,7 @@ if(pan_item_sel<pan_primer_item)
 if(pan_item_sel<pan_primer_item) 
     pan_primer_item=pan_item_sel;
 /******************************************************/
-Serial.printf("pan_primer_item :%d / pan_item_sel: %d / Cant_Items_Nivel: %d \n",pan_primer_item,pan_item_sel,Cant_Items_Nivel);
+//Serial.printf("pan_primer_item :%d / pan_item_sel: %d / Cant_Items_Nivel: %d \n",pan_primer_item,pan_item_sel,Cant_Items_Nivel);
 
 /*+++Guarda en pan_Etiquetas el texto a mostrar en pantalla dependiendo si los items ocupan 1 o 2 lineas+++*/
 for(k=pan_primer_item,j=0;j<MAX_ITEMS_PAN && k<Cant_Items_Nivel ;k++,j++)
@@ -146,15 +145,15 @@ for(k=pan_primer_item,j=0;j<MAX_ITEMS_PAN && k<Cant_Items_Nivel ;k++,j++)
                     case TIPO_TXT_SM_SL_ALFA:                
                     case TIPO_HORA_SM_SL:
                     case TIPO_FECHA_SM_SL: 
-                        strncpy(pan_Etiquetas[j+1],variables_txt[menu[Items_Nivel[k]].Variable_Asoc],TAM_VAR_TXT - 1);                
+                        strncpy(pan_Etiquetas[j+1],variables.vtxt[menu[Items_Nivel[k]].Variable_Asoc],TAM_VAR_TXT - 1);                
                         break;
                     case TIPO_SHORT_SM_ML:
-                        sprintf(pan_Etiquetas[j+1],"%d",variables_short[menu[Items_Nivel[k]].Variable_Asoc]);
-                        //itoa(variables_short[menu[Items_Nivel[k]].Variable_Asoc],str_aux,TAM_VAR_TXT - 1);
+                        sprintf(pan_Etiquetas[j+1],"%d",variables.vshort[menu[Items_Nivel[k]].Variable_Asoc]);
+                        //itoa(variables.vshort[menu[Items_Nivel[k]].Variable_Asoc],str_aux,TAM_VAR_TXT - 1);
                         //strncpy(,str_aux,TAM_VAR_TXT - 1);
                         break;
                     case TIPO_SINGLE_SM_SL:
-                        sprintf(pan_Etiquetas[j+1],"%f",variables_float[menu[Items_Nivel[k]].Variable_Asoc]);                    
+                        sprintf(pan_Etiquetas[j+1],"%f",variables.vfloat[menu[Items_Nivel[k]].Variable_Asoc]);                    
                         break;
                     default:
                         break;
@@ -182,7 +181,7 @@ for(k=pan_primer_item,j=0;j<MAX_ITEMS_PAN && k<Cant_Items_Nivel ;k++,j++)
                 }
             else
                 {
-                if(variables_bit&(1<<menu[Items_Nivel[k]].Variable_Asoc))
+                if(variables.vbit&(1<<menu[Items_Nivel[k]].Variable_Asoc))
                     {
                     strncpy(pan_Etiquetas[j+1],"SI",TAM_VAR_TXT - 1);
                     }
@@ -210,8 +209,8 @@ for(k=pan_primer_item,j=0;j<MAX_ITEMS_PAN && k<Cant_Items_Nivel ;k++,j++)
                 mnu_edicion.digito_ON=true;
                 }
             str_Aux[l+1]='\0';
-            Serial.printf("str_Aux: %s\n",str_Aux);
-            Serial.printf("mnu_edicion.pos_digito : %d\n",mnu_edicion.pos_digito);
+//            Serial.printf("str_Aux: %s\n",str_Aux);
+//            Serial.printf("mnu_edicion.pos_digito : %d\n",mnu_edicion.pos_digito);
             strcpy(pan_Etiquetas[j+1],str_Aux);
             Cant_Items_Nivel=2;
             pan_alin[j+1]=LV_ALIGN_TOP_RIGHT;
@@ -492,21 +491,21 @@ switch(Tecla)
             case TIPO_TXT_SM_SL_ALFA:
             case TIPO_HORA_SM_SL:
             case TIPO_FECHA_SM_SL:            
-                strncpy(mnu_edicion.str_dato,variables_txt[menu[mnu_item_actual].Variable_Asoc],TAM_VAR_TXT-1);
+                strncpy(mnu_edicion.str_dato,variables.vtxt[menu[mnu_item_actual].Variable_Asoc],TAM_VAR_TXT-1);
                 mnu_edicion.digito_ON=false;
                 mnu_edicion.item_ON=true;
                 mnu_edicion.ms_parpadea = millis();
                 mnu_edicion.pos_digito=0;
                 break;
             case TIPO_SHORT_SM_ML:
-                sprintf(mnu_edicion.str_dato,"%d",variables_short[menu[mnu_item_actual].Variable_Asoc]);
+                sprintf(mnu_edicion.str_dato,"%d",variables.vshort[menu[mnu_item_actual].Variable_Asoc]);
                 mnu_edicion.digito_ON=false;
                 mnu_edicion.item_ON=true;
                 mnu_edicion.ms_parpadea = millis();
                 mnu_edicion.pos_digito=0;
                 break;
             case TIPO_SINGLE_SM_SL:
-                sprintf(mnu_edicion.str_dato,"%f",variables_float[menu[mnu_item_actual].Variable_Asoc]);
+                sprintf(mnu_edicion.str_dato,"%f",variables.vfloat[menu[mnu_item_actual].Variable_Asoc]);
                 mnu_edicion.digito_ON=false;
                 mnu_edicion.item_ON=true;
                 mnu_edicion.ms_parpadea = millis();
@@ -517,7 +516,7 @@ switch(Tecla)
                 mnu_edicion.item_ON=true;
                 mnu_edicion.ms_parpadea = millis();
                 mnu_edicion.pos_digito=0;
-                if(variables_bit&(1<<menu[mnu_item_actual].Variable_Asoc))
+                if(variables.vbit&(1<<menu[mnu_item_actual].Variable_Asoc))
                     {
                     strncpy(mnu_edicion.str_dato,"SI",TAM_VAR_TXT - 1);
                     }
@@ -550,28 +549,28 @@ switch(Tecla)
             {
             case TIPO_HORA_SM_SL:
                 //if(validarHora(mnu_edicion.str_dato))
-                    strncpy(variables_txt[menu[mnu_item_actual].Variable_Asoc],mnu_edicion.str_dato,TAM_VAR_TXT-1);
+                    strncpy(variables.vtxt[menu[mnu_item_actual].Variable_Asoc],mnu_edicion.str_dato,TAM_VAR_TXT-1);
                 break;
             case TIPO_FECHA_SM_SL:
                 //if(validarFecha(mnu_edicion.str_dato))
-                    strncpy(variables_txt[menu[mnu_item_actual].Variable_Asoc],mnu_edicion.str_dato,TAM_VAR_TXT-1);
+                    strncpy(variables.vtxt[menu[mnu_item_actual].Variable_Asoc],mnu_edicion.str_dato,TAM_VAR_TXT-1);
                 break;
             case TIPO_TXT_SM_ML:
             case TIPO_TXT_SM_SL:
             case TIPO_TXT_SM_SL_ALFA:
-                strncpy(variables_txt[menu[mnu_item_actual].Variable_Asoc],mnu_edicion.str_dato,TAM_VAR_TXT-1);
+                strncpy(variables.vtxt[menu[mnu_item_actual].Variable_Asoc],mnu_edicion.str_dato,TAM_VAR_TXT-1);
                 break;
             case TIPO_SHORT_SM_ML:
-                variables_short[menu[mnu_item_actual].Variable_Asoc]=atoi(mnu_edicion.str_dato);
+                variables.vshort[menu[mnu_item_actual].Variable_Asoc]=atoi(mnu_edicion.str_dato);
                 break;
             case TIPO_SINGLE_SM_SL:
-                variables_float[menu[mnu_item_actual].Variable_Asoc]=atof(mnu_edicion.str_dato);
+                variables.vfloat[menu[mnu_item_actual].Variable_Asoc]=atof(mnu_edicion.str_dato);
                 break;
             case TIPO_BIT_SM_ML:
                 if(!strcmp(mnu_edicion.str_dato,"SI"))                    
-                    variables_bit|=(1<<menu[mnu_item_actual].Variable_Asoc);
+                    variables.vbit|=(1<<menu[mnu_item_actual].Variable_Asoc);
                 else
-                    variables_bit&=~(1<<menu[mnu_item_actual].Variable_Asoc);
+                    variables.vbit&=~(1<<menu[mnu_item_actual].Variable_Asoc);
                 break;
             default:
             break;
@@ -594,7 +593,7 @@ switch(Tecla)
                 }
             }
         else
-            strncpy(variables_txt[menu[mnu_item_actual].Variable_Asoc],mnu_edicion.str_dato,TAM_VAR_TXT-1);
+            strncpy(variables.vtxt[menu[mnu_item_actual].Variable_Asoc],mnu_edicion.str_dato,TAM_VAR_TXT-1);
         }
         break;
     case 'S': //Stop
@@ -626,6 +625,13 @@ switch(Tecla)
                         mnu_cambio_menu(mnu_busca_BackNivel(mnu_item_actual));
                         }
                     }
+                }
+            switch(menu[mnu_item_actual].Post_Proceso)
+                {
+                case POST_SAVE_PARAM:
+                save_variables("/parametros.txt");
+                break;
+
                 }
             }
         break;
@@ -756,7 +762,7 @@ switch(Tecla)
         break;
     case 'r':
     case 'R'://Show menu y variables
-        Serial.printf("Item_Actual: %d \n",mnu_item_actual);
+//        Serial.printf("Item_Actual: %d \n",mnu_item_actual);
         mnu_show();
         break;
     case 'c':// Pantalla Carga
@@ -826,20 +832,20 @@ return -1;
 
 void mnu_cambio_menu(int New_item)
 {
-Serial.printf("Item_Actual: %d \n",mnu_item_actual);
+//Serial.printf("Item_Actual: %d \n",mnu_item_actual);
 //Ejecutar Post_Proceso
 mnu_item_actual=New_item;
 mnu_edicion.item_ON=false;
 mnu_show();
 //Ejecutar Pre_Proceso
-Serial.printf("Item_Actual: %d \n",mnu_item_actual);
+//Serial.printf("Item_Actual: %d \n",mnu_item_actual);
 }
 
 
 char mnu_validar_password(char password[])
 {
 
-  if(!strcmp(password,variables_txt[TXT_PASSWORD_MEM_1]) || !strcmp(password,PASSWORD_FIX))
+  if(!strcmp(password,variables.vtxt[TXT_PASSWORD_MEM_1]) || !strcmp(password,PASSWORD_FIX))
         return 1;
   else
       return 0;
