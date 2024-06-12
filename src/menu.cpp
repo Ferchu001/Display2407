@@ -1,5 +1,5 @@
 
-//    Nivel, SubNivel, Etiqueta, Tipo, Nivel_Next, Cant_digitos, Nivel_Back, Tecla_Rapida, Pre_proceso, PostProceso, Variable_Asoc
+//menu.cpp
 #include "constantes.h"
 #include "menu.h"
 #include <Arduino.h>
@@ -30,8 +30,12 @@ int pan_primer_item_back=0;
 extern struct Var variables;
 
 extern void save_variables(const char* path);
+extern void save_ini_recorrido(void);
 
 /************************************************************/
+
+
+void mnu_trae_dato_edit(void);
 
 #define MAX_ITEMS_PAN 4
 #define ALNG_RIGHT 1
@@ -42,6 +46,7 @@ extern void save_variables(const char* path);
 
 void mnu_show(void)
 {
+     Serial.println("mnu_show called");
 u_char k=0,j=0;
 char Cant_Items_Nivel=0; //Cuenta la cantidad de Items en el nivel acutal en pantalla
 int Items_Nivel[50]={0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0};
@@ -56,8 +61,8 @@ int l;
 char z;
 int VectorTotPan[50];
 char TotPan=0;
-char str_aux[TAM_VAR_TXT];
-
+//char str_aux[TAM_VAR_TXT];
+Serial.println("Aca 1");
 for (int i = 0; i < sizeof(menu) / sizeof(menu[0]); i++) 
     {    
     if (menu[i].Nivel == nivel_actual) 
@@ -65,10 +70,8 @@ for (int i = 0; i < sizeof(menu) / sizeof(menu[0]); i++)
         Items_Nivel[k]=i;
         if(i==mnu_item_actual)
             {
-            //Serial.print(">>");
             pan_item_sel=k;
             }
-   //     Serial.println(menu[i].Etiqueta);
         switch(menu[Items_Nivel[j]].Tipo)
             {                
             case TIPO_TXT_SM_ML:
@@ -91,7 +94,7 @@ for (int i = 0; i < sizeof(menu) / sizeof(menu[0]); i++)
         }    
     }    
 Cant_Items_Nivel=k;
-
+Serial.println("Aca 2");
 /******************Scroll******************************/
 z=0;
 while(VectorTotPan[pan_item_sel]-4>=VectorTotPan[z])
@@ -128,10 +131,11 @@ for(k=pan_primer_item,j=0;j<MAX_ITEMS_PAN && k<Cant_Items_Nivel ;k++,j++)
                 if(mnu_edicion.digito_ON==true)
                     {
                     str_Aux[mnu_edicion.pos_digito]='_';
+                    str_Aux[mnu_edicion.pos_digito+1]='\0';
                     mnu_edicion.digito_ON=false;
                     }
                 else
-                    {
+                    {                 
                     mnu_edicion.digito_ON=true;
                     }
                 strncpy(pan_Etiquetas[j+1],str_Aux,TAM_VAR_TXT - 1);
@@ -149,8 +153,6 @@ for(k=pan_primer_item,j=0;j<MAX_ITEMS_PAN && k<Cant_Items_Nivel ;k++,j++)
                         break;
                     case TIPO_SHORT_SM_ML:
                         sprintf(pan_Etiquetas[j+1],"%d",variables.vshort[menu[Items_Nivel[k]].Variable_Asoc]);
-                        //itoa(variables.vshort[menu[Items_Nivel[k]].Variable_Asoc],str_aux,TAM_VAR_TXT - 1);
-                        //strncpy(,str_aux,TAM_VAR_TXT - 1);
                         break;
                     case TIPO_SINGLE_SM_SL:
                         sprintf(pan_Etiquetas[j+1],"%f",variables.vfloat[menu[Items_Nivel[k]].Variable_Asoc]);                    
@@ -209,8 +211,6 @@ for(k=pan_primer_item,j=0;j<MAX_ITEMS_PAN && k<Cant_Items_Nivel ;k++,j++)
                 mnu_edicion.digito_ON=true;
                 }
             str_Aux[l+1]='\0';
-//            Serial.printf("str_Aux: %s\n",str_Aux);
-//            Serial.printf("mnu_edicion.pos_digito : %d\n",mnu_edicion.pos_digito);
             strcpy(pan_Etiquetas[j+1],str_Aux);
             Cant_Items_Nivel=2;
             pan_alin[j+1]=LV_ALIGN_TOP_RIGHT;
@@ -223,6 +223,8 @@ for(k=pan_primer_item,j=0;j<MAX_ITEMS_PAN && k<Cant_Items_Nivel ;k++,j++)
 
 /*+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++*/
 
+
+Serial.println("Aca 3");
 /************Muestra Items en pantalla******************/
 for(k=0;k<MAX_ITEMS_PAN;k++)
     {
@@ -279,7 +281,7 @@ for(k=0;k<MAX_ITEMS_PAN;k++)
                 }
             else
                 {
-                lv_label_set_text_fmt(ui_Menu2, "");
+                lv_label_set_text_fmt(ui_Menu2, " ");
                 lv_obj_set_style_bg_color(ui_Fondo2, lv_color_hex(CLR_BLACK), LV_PART_MAIN | LV_STATE_DEFAULT);
                 lv_obj_set_style_text_color(ui_Menu2, lv_color_hex(CLR_BLACK), LV_PART_MAIN | LV_STATE_DEFAULT); 
                 }
@@ -311,7 +313,7 @@ for(k=0;k<MAX_ITEMS_PAN;k++)
                 }
             else
                 {
-                lv_label_set_text_fmt(ui_Menu3, "");
+                lv_label_set_text_fmt(ui_Menu3, " ");
                 lv_obj_set_style_bg_color(ui_Fondo3, lv_color_hex(CLR_BLACK), LV_PART_MAIN | LV_STATE_DEFAULT);
                 lv_obj_set_style_text_color(ui_Menu3, lv_color_hex(CLR_BLACK), LV_PART_MAIN | LV_STATE_DEFAULT); 
                 }                    
@@ -343,7 +345,7 @@ for(k=0;k<MAX_ITEMS_PAN;k++)
                 }
             else
                 {
-                lv_label_set_text_fmt(ui_Menu4, "");
+                lv_label_set_text_fmt(ui_Menu4, " ");
                 lv_obj_set_style_bg_color(ui_Fondo4, lv_color_hex(CLR_BLACK), LV_PART_MAIN | LV_STATE_DEFAULT);
                 lv_obj_set_style_text_color(ui_Menu4, lv_color_hex(CLR_BLACK), LV_PART_MAIN | LV_STATE_DEFAULT); 
                 }                    
@@ -351,14 +353,16 @@ for(k=0;k<MAX_ITEMS_PAN;k++)
             break;                                
             }
         }
-        
+Serial.println("Aca 4");
 }
 
 
 void mnu_select(char Tecla)
 {
 int mnu_prov;
-char str_aux[TAM_VAR_TXT];
+//char str_aux[TAM_VAR_TXT];
+
+Serial.printf("mnu_select called with key: %c\n", Tecla);
 
 if(Tecla>='0' && Tecla<='9' )
     if(mnu_edicion.item_ON==false)
@@ -385,6 +389,7 @@ if(Tecla>='0' && Tecla<='9' )
         }       
     else
         {
+        Serial.printf("mnu_edicion.pos_digito:%d\n",mnu_edicion.pos_digito);
         switch(menu[mnu_item_actual].Tipo)
             {
             case TIPO_TXT_SM_ML:
@@ -484,67 +489,11 @@ switch(Tecla)
     case 'o': //Ok        
     if(mnu_edicion.item_ON==false)
         {
-        switch(menu[mnu_item_actual].Tipo)
-            {
-            case TIPO_TXT_SM_ML:
-            case TIPO_TXT_SM_SL:
-            case TIPO_TXT_SM_SL_ALFA:
-            case TIPO_HORA_SM_SL:
-            case TIPO_FECHA_SM_SL:            
-                strncpy(mnu_edicion.str_dato,variables.vtxt[menu[mnu_item_actual].Variable_Asoc],TAM_VAR_TXT-1);
-                mnu_edicion.digito_ON=false;
-                mnu_edicion.item_ON=true;
-                mnu_edicion.ms_parpadea = millis();
-                mnu_edicion.pos_digito=0;
-                break;
-            case TIPO_SHORT_SM_ML:
-                sprintf(mnu_edicion.str_dato,"%d",variables.vshort[menu[mnu_item_actual].Variable_Asoc]);
-                mnu_edicion.digito_ON=false;
-                mnu_edicion.item_ON=true;
-                mnu_edicion.ms_parpadea = millis();
-                mnu_edicion.pos_digito=0;
-                break;
-            case TIPO_SINGLE_SM_SL:
-                sprintf(mnu_edicion.str_dato,"%f",variables.vfloat[menu[mnu_item_actual].Variable_Asoc]);
-                mnu_edicion.digito_ON=false;
-                mnu_edicion.item_ON=true;
-                mnu_edicion.ms_parpadea = millis();
-                mnu_edicion.pos_digito=0;
-                break;
-            case TIPO_BIT_SM_ML:
-                mnu_edicion.digito_ON=false;
-                mnu_edicion.item_ON=true;
-                mnu_edicion.ms_parpadea = millis();
-                mnu_edicion.pos_digito=0;
-                if(variables.vbit&(1<<menu[mnu_item_actual].Variable_Asoc))
-                    {
-                    strncpy(mnu_edicion.str_dato,"SI",TAM_VAR_TXT - 1);
-                    }
-                else
-                    {
-                    strncpy(mnu_edicion.str_dato,"NO",TAM_VAR_TXT - 1);
-                    }
-                break;                
-            default:
-                switch(menu[mnu_item_actual].Nivel_Next)
-                    {
-                    case ID_NXT_ITEM:
-                        mnu_cambio_menu(mnu_Nxt_item());
-                        break;
-                    default:
-                        if(menu[mnu_item_actual].Nivel_Next!=ID_VOID)
-                            {
-                            pan_primer_item=0;//Si no se esta en edicion
-                            mnu_cambio_menu(mnu_busca_nextNivel(mnu_item_actual));
-                            }
-                        break;
-                    }
-                break;
-            }
+        mnu_trae_dato_edit();
         }
     else //Editando variable
         {//Guarda Variable editada
-        mnu_edicion.item_ON=false;        
+        mnu_edicion.item_ON=false;
         switch(menu[mnu_item_actual].Tipo)
             {
             case TIPO_HORA_SM_SL:
@@ -575,6 +524,36 @@ switch(Tecla)
             default:
             break;
             }
+
+            mnu_prov=mnu_Nxt_item();
+            if(mnu_prov>=0)
+                {
+                mnu_cambio_menu(mnu_prov);
+                switch(menu[mnu_item_actual].Tipo)
+                    {//Todos los editables
+                    case TIPO_SINGLE_SM_SL:
+                    case TIPO_BIT_SM_ML:
+                    case TIPO_SHORT_SM_ML:
+                    case TIPO_TXT_SM_ML:
+                    case TIPO_TXT_SM_SL:
+                    case TIPO_TXT_SM_SL_ALFA:
+                    case TIPO_FECHA_SM_SL:
+                    case TIPO_HORA_SM_SL:                    
+                        mnu_trae_dato_edit();
+                        break;
+                    default:
+                        break;
+                    }
+                }
+            else
+                {
+                if(menu[mnu_item_actual].Nivel_Next!=ID_VOID)
+                    {
+                    pan_primer_item=0;//Si no se esta en edicion
+                    mnu_cambio_menu(mnu_busca_nextNivel(mnu_item_actual));
+                    }
+                }            
+
         mnu_show();
         if(menu[mnu_item_actual].Nivel ==  ID_PASSWORD)
             {
@@ -631,12 +610,15 @@ switch(Tecla)
                 case POST_SAVE_PARAM:
                 save_variables("/parametros.txt");
                 break;
+                case POST_START_RECORRIDO:
+                save_ini_recorrido();
+                break;
 
                 }
             }
         break;
-//    case 'P'://Printer
- //   case 'p':
+    case 'P'://Printer
+    case 'p':
     case '.'://Printer
        if(mnu_edicion.item_ON==false)
             {
@@ -725,14 +707,14 @@ switch(Tecla)
     case 'D': //DOWN
     case 'd':        
         if(mnu_edicion.item_ON==true)
-            {      
+            {
             if(menu[mnu_item_actual].Tipo==TIPO_BIT_SM_ML)
                 {
                 if(strcmp(mnu_edicion.str_dato,"SI"))
                     strncpy(mnu_edicion.str_dato,"SI",TAM_VAR_TXT - 1);
                 else
                     strncpy(mnu_edicion.str_dato,"NO",TAM_VAR_TXT - 1);
-                }                
+                }
             else
                 {
                 switch(menu[mnu_item_actual].Tipo)
@@ -757,7 +739,7 @@ switch(Tecla)
             if(mnu_prov>=0)
                 {
                 mnu_cambio_menu(mnu_prov);
-                }            
+                }
             }
         break;
     case 'r':
@@ -775,6 +757,68 @@ switch(Tecla)
 
 }
 
+void mnu_trae_dato_edit(void)
+{
+    Serial.println("trae 1");
+            switch(menu[mnu_item_actual].Tipo)
+            {
+            case TIPO_TXT_SM_ML:
+            case TIPO_TXT_SM_SL:
+            case TIPO_TXT_SM_SL_ALFA:
+            case TIPO_HORA_SM_SL:
+            case TIPO_FECHA_SM_SL:            
+                strncpy(mnu_edicion.str_dato,variables.vtxt[menu[mnu_item_actual].Variable_Asoc],TAM_VAR_TXT-1);
+                mnu_edicion.digito_ON=false;
+                mnu_edicion.item_ON=true;
+                mnu_edicion.ms_parpadea = millis();
+                mnu_edicion.pos_digito=0;
+                break;
+            case TIPO_SHORT_SM_ML:
+                sprintf(mnu_edicion.str_dato,"%d",variables.vshort[menu[mnu_item_actual].Variable_Asoc]);
+                mnu_edicion.digito_ON=false;
+                mnu_edicion.item_ON=true;
+                mnu_edicion.ms_parpadea = millis();
+                mnu_edicion.pos_digito=0;
+                break;
+            case TIPO_SINGLE_SM_SL:
+                sprintf(mnu_edicion.str_dato,"%f",variables.vfloat[menu[mnu_item_actual].Variable_Asoc]);
+                mnu_edicion.digito_ON=false;
+                mnu_edicion.item_ON=true;
+                mnu_edicion.ms_parpadea = millis();
+                mnu_edicion.pos_digito=0;
+                break;
+            case TIPO_BIT_SM_ML:
+                mnu_edicion.digito_ON=false;
+                mnu_edicion.item_ON=true;
+                mnu_edicion.ms_parpadea = millis();
+                mnu_edicion.pos_digito=0;
+                if(variables.vbit&(1<<menu[mnu_item_actual].Variable_Asoc))
+                    {
+                    strncpy(mnu_edicion.str_dato,"SI",TAM_VAR_TXT - 1);
+                    }
+                else
+                    {
+                    strncpy(mnu_edicion.str_dato,"NO",TAM_VAR_TXT - 1);
+                    }
+                break;                
+            default:
+                switch(menu[mnu_item_actual].Nivel_Next)
+                    {
+                    case ID_NXT_ITEM:
+                        mnu_cambio_menu(mnu_Nxt_item());
+                        break;
+                    default:
+                        if(menu[mnu_item_actual].Nivel_Next!=ID_VOID)
+                            {
+                            pan_primer_item=0;//Si no se esta en edicion
+                            mnu_cambio_menu(mnu_busca_nextNivel(mnu_item_actual));
+                            }
+                        break;
+                    }
+                break;
+            }
+    Serial.println("trae 2");
+}
 
 int mnu_busca_nextNivel(int item)
 {
@@ -832,13 +876,11 @@ return -1;
 
 void mnu_cambio_menu(int New_item)
 {
-//Serial.printf("Item_Actual: %d \n",mnu_item_actual);
+Serial.printf("Changing menu from %d to %d\n", mnu_item_actual, New_item);
 //Ejecutar Post_Proceso
 mnu_item_actual=New_item;
 mnu_edicion.item_ON=false;
 mnu_show();
-//Ejecutar Pre_Proceso
-//Serial.printf("Item_Actual: %d \n",mnu_item_actual);
 }
 
 

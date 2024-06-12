@@ -30,6 +30,8 @@ extern lv_obj_t * ui_Fondo3;
 extern lv_obj_t * ui_Menu3;
 extern lv_obj_t * ui_Fondo4;
 extern lv_obj_t * ui_Menu4;
+extern lv_obj_t * ui_Fondo5;
+extern lv_obj_t * ui_Menu5;
 // SCREEN: ui_Screen2
 void ui_Screen2_screen_init(void);
 void ui_event_Screen2(lv_event_t * e);
@@ -51,11 +53,10 @@ extern lv_obj_t * ui____initial_actions0;
 
 
 
-LV_FONT_DECLARE(ui_font_OpenSansCSB42);
-LV_FONT_DECLARE(ui_font_OpenSansCSB48);
-LV_FONT_DECLARE(ui_font_OpenSansCSB96);
 LV_FONT_DECLARE(ui_font_OpenSans102);
+LV_FONT_DECLARE(ui_font_OpenSans24);
 LV_FONT_DECLARE(ui_font_OpenSans52);
+LV_FONT_DECLARE(ui_font_OpenSansCSB42);
 
 
 

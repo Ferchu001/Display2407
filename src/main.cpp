@@ -1,11 +1,5 @@
-/*
- * SPDX-FileCopyrightText: 2022 Espressif Systems (Shanghai) CO LTD
- *
- * SPDX-License-Identifier: CC0-1.0
- */
-
 #include <Arduino.h>
-#include <Arduinojson.h>
+#include <ArduinoJson.h>
 #include <esp32_smartdisplay.h>
 #include <ui/ui.h>
 #include <FS.h>
@@ -24,38 +18,51 @@ extern char check_teclado(void);
 extern void mnu_select(char Tecla);
 extern void mnu_show(void);
 extern void init_variables(void);
+extern unsigned char calculateChecksumDis(const String& data);
 
 /*******************************************************************************
 * external variables
 *******************************************************************************/
 extern edicion mnu_edicion;
 
-
 /*******************************************************************************
 * Private functions
 *******************************************************************************/
 void check_rx_commands(void);
+void handleReceivedData(void *pvParameters);
 
 /*******************************************************************************
 * Private variables
 *******************************************************************************/
-ulong next_millis=0;
-ulong Timer_panRefresh=0;
+ulong next_millis = 0;
+ulong Timer_panRefresh = 0;
 #define TIME_REFRESH_PAN 100 //ms
 
 char Tecla;
+
+struct msgboxst
+{
+    unsigned long Time;
+    bool visible = false;
+    char text1[18];
+    char text2[18];
+} msgbox;
+
 struct Dis
 {
     int Actual = 0;
     bool Change = false;
 } Display;
 
+QueueHandle_t receivedDataQueue;
+String jsonData = ""; // Buffer for incoming data
+
 void setup()
 {
-
     Serial.begin(115200);
     Serial.setDebugOutput(false);
-    if (!SPIFFS.begin(true)) {
+    if (!SPIFFS.begin(true))
+    {
         Serial.println("An error occurred while mounting SPIFFS");
     }
     Serial.println("SPIFFS mounted successfully");
@@ -71,14 +78,20 @@ void setup()
 
     mnu_show();
     Serial2.begin(115200, SERIAL_8N1, GPIO_NUM_22, GPIO_NUM_27);
+
+    receivedDataQueue = xQueueCreate(10, sizeof(DataInDis));
+    if (receivedDataQueue == NULL)
+    {
+        Serial.println("Error creating the receivedData queue");
+    }
 }
+
 void Led(void)
 {
     auto const now = millis();
     if (now > next_millis)
     {
-        next_millis = now + 500;
-
+        next_millis = now + 1000;
 #ifdef BOARD_HAS_RGB_LED
         auto const rgb = (now / 2000) % 8;
         smartdisplay_led_set_rgb(rgb & 0x01, rgb & 0x02, rgb & 0x04);
@@ -86,23 +99,25 @@ void Led(void)
     }
 }
 
-
+DataInDis receivedData;
 void loop()
 {
-    
     Led();
-
-    // Comparar currentData con previousData y enviar solo los cambios
     sendDataDis(currentDataOutDis);
+    receiveDataDis(receivedData);
+    if(receivedData.teclado!=0)
+        {
+        mnu_select((char)receivedData.teclado);
+        receivedData.teclado=0;
+        }
 
-    // Recibir y actualizar currentData
-    if (receiveDataDis(currentDataInDis)) {
-        // Aquí se puede hacer cualquier otra operación necesaria después de recibir los datos
+    char tecla = check_teclado();
+    if (tecla != 0)
+    {
+        mnu_select(tecla);
     }
-    // Actualizar previousData con los valores actuales después de enviar los cambios
+
     previousDataOutDis = currentDataOutDis;
-
-
 
     if (Display.Change == true)
     {
@@ -125,16 +140,10 @@ void loop()
         Serial.println("Cambio a Display: " + String(Display.Actual));
     }
 
-    if(Tecla!=0)
-        {
-        mnu_select(Tecla);
-        Tecla=0;
-        }
-    if(mnu_edicion.item_ON==true && millis()>mnu_edicion.ms_parpadea+TIEMPO_PARPADEA_EDICION)  
-        {
-        //mnu_edicion.ms_parpadea=millis();
-        mnu_show();        
-        }
-        
+    if (mnu_edicion.item_ON == true && millis() > mnu_edicion.ms_parpadea + TIEMPO_PARPADEA_EDICION)
+    {
+        mnu_show();
+    }
+
     lv_timer_handler();
 }

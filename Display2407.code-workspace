@@ -9,7 +9,8 @@
 			"*.embeddedhtml": "html",
 			"*.json": "json",
 			"ui_comp.h": "c",
-			"sstream": "cpp"
+			"sstream": "cpp",
+			"functional": "cpp"
 		}
 	}
 }

@@ -9,6 +9,8 @@ void ui_Screen1_screen_init(void)
 {
     ui_Screen1 = lv_obj_create(NULL);
     lv_obj_clear_flag(ui_Screen1, LV_OBJ_FLAG_SCROLLABLE);      /// Flags
+    lv_obj_set_style_shadow_color(ui_Screen1, lv_color_hex(0x8BCFFF), LV_PART_MAIN | LV_STATE_DEFAULT);
+    lv_obj_set_style_shadow_opa(ui_Screen1, 255, LV_PART_MAIN | LV_STATE_DEFAULT);
 
     ui_Fondo1 = lv_obj_create(ui_Screen1);
     lv_obj_set_width(ui_Fondo1, 320);
@@ -22,7 +24,7 @@ void ui_Screen1_screen_init(void)
     lv_obj_set_height(ui_Menu1, LV_SIZE_CONTENT);    /// 1
     lv_obj_set_x(ui_Menu1, -1);
     lv_obj_set_y(ui_Menu1, -18);
-    lv_label_set_text(ui_Menu1, "0123456789123456");
+    lv_label_set_text(ui_Menu1, "012345678912");
     lv_obj_set_style_text_color(ui_Menu1, lv_color_hex(0xFFFFFF), LV_PART_MAIN | LV_STATE_DEFAULT);
     lv_obj_set_style_text_opa(ui_Menu1, 255, LV_PART_MAIN | LV_STATE_DEFAULT);
     lv_obj_set_style_text_font(ui_Menu1, &ui_font_OpenSans52, LV_PART_MAIN | LV_STATE_DEFAULT);
@@ -83,6 +85,26 @@ void ui_Screen1_screen_init(void)
     lv_obj_set_style_text_color(ui_Menu4, lv_color_hex(0x000000), LV_PART_MAIN | LV_STATE_DEFAULT);
     lv_obj_set_style_text_opa(ui_Menu4, 255, LV_PART_MAIN | LV_STATE_DEFAULT);
     lv_obj_set_style_text_font(ui_Menu4, &ui_font_OpenSans52, LV_PART_MAIN | LV_STATE_DEFAULT);
+
+    ui_Fondo5 = lv_obj_create(ui_Screen1);
+    lv_obj_set_width(ui_Fondo5, 280);
+    lv_obj_set_height(ui_Fondo5, 109);
+    lv_obj_set_x(ui_Fondo5, 14);
+    lv_obj_set_y(ui_Fondo5, 62);
+    lv_obj_add_flag(ui_Fondo5, LV_OBJ_FLAG_HIDDEN);     /// Flags
+    lv_obj_clear_flag(ui_Fondo5, LV_OBJ_FLAG_SCROLLABLE);      /// Flags
+    lv_obj_set_style_bg_color(ui_Fondo5, lv_color_hex(0xFFFFFF), LV_PART_MAIN | LV_STATE_DEFAULT);
+    lv_obj_set_style_bg_opa(ui_Fondo5, 255, LV_PART_MAIN | LV_STATE_DEFAULT);
+
+    ui_Menu5 = lv_label_create(ui_Fondo5);
+    lv_obj_set_width(ui_Menu5, LV_SIZE_CONTENT);   /// 1
+    lv_obj_set_height(ui_Menu5, LV_SIZE_CONTENT);    /// 1
+    lv_obj_set_x(ui_Menu5, -1);
+    lv_obj_set_y(ui_Menu5, -19);
+    lv_label_set_text(ui_Menu5, "2 CIP");
+    lv_obj_set_style_text_color(ui_Menu5, lv_color_hex(0x000000), LV_PART_MAIN | LV_STATE_DEFAULT);
+    lv_obj_set_style_text_opa(ui_Menu5, 255, LV_PART_MAIN | LV_STATE_DEFAULT);
+    lv_obj_set_style_text_font(ui_Menu5, &ui_font_OpenSans52, LV_PART_MAIN | LV_STATE_DEFAULT);
 
     lv_obj_add_event_cb(ui_Screen1, ui_event_Screen1, LV_EVENT_ALL, NULL);
 
