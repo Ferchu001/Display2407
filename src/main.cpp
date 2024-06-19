@@ -38,21 +38,13 @@ ulong next_millis = 0;
 ulong Timer_panRefresh = 0;
 #define TIME_REFRESH_PAN 100 //ms
 
+bool BombaON=false;
+
 char Tecla;
 
-struct msgboxst
-{
-    unsigned long Time;
-    bool visible = false;
-    char text1[18];
-    char text2[18];
-} msgbox;
 
-struct Dis
-{
-    int Actual = 0;
-    bool Change = false;
-} Display;
+struct msgboxst msgbox;
+struct Dis Display;
 
 QueueHandle_t receivedDataQueue;
 String jsonData = ""; // Buffer for incoming data
@@ -102,6 +94,16 @@ void Led(void)
 DataInDis receivedData;
 void loop()
 {
+    if(msgbox.visible==true)
+        {
+        lv_label_set_text(ui_msgtxt1, msgbox.text1);
+        lv_label_set_text(ui_msgtxt2, msgbox.text2);
+        lv_obj_clear_flag(ui_msgbox, LV_OBJ_FLAG_HIDDEN);
+        }
+    else
+        {
+        lv_obj_add_flag(ui_msgbox, LV_OBJ_FLAG_HIDDEN);     /// Flags
+        }
     Led();
     sendDataDis(currentDataOutDis);
     receiveDataDis(receivedData);
@@ -114,6 +116,10 @@ void loop()
     char tecla = check_teclado();
     if (tecla != 0)
     {
+        if(tecla=='U')
+            msgbox.visible=true;
+        if(tecla=='D')
+            msgbox.visible=false;
         mnu_select(tecla);
     }
 

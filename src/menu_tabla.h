@@ -553,6 +553,8 @@
 #define ET_GPRSPOW "GPRS POWER"
 #define ET_GPS "GPS"
 #define ET_STATUS "STATUS"
+#define ET_PAN_CARGA "PAN CARGA" //NO SE MUESTRA
+#define ET_PAN_IO "PAN I/O" //NO SE MUESTRA
 
 // void mnuf_presenta_pantalla_io()
 #define IO_V "V= "

@@ -30,8 +30,9 @@ extern lv_obj_t * ui_Fondo3;
 extern lv_obj_t * ui_Menu3;
 extern lv_obj_t * ui_Fondo4;
 extern lv_obj_t * ui_Menu4;
-extern lv_obj_t * ui_Fondo5;
-extern lv_obj_t * ui_Menu5;
+extern lv_obj_t * ui_msgbox;
+extern lv_obj_t * ui_msgtxt1;
+extern lv_obj_t * ui_msgtxt2;
 // SCREEN: ui_Screen2
 void ui_Screen2_screen_init(void);
 void ui_event_Screen2(lv_event_t * e);

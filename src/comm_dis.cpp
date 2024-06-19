@@ -97,8 +97,7 @@ bool receiveDataDis(DataInDis& data) {
             }
             if (doc.containsKey("TEC")) {
                 data.teclado = doc["TEC"];
-                Tecla=(char)data.teclado;
-                Serial.printf("Tecla Recibida: %d :%c",Tecla,Tecla);
+                Tecla=(char)data.teclado;                
             }
             if (doc.containsKey("TEMP")) {
                 data.temperatura = doc["TEMP"];

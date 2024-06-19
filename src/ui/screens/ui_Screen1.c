@@ -86,25 +86,35 @@ void ui_Screen1_screen_init(void)
     lv_obj_set_style_text_opa(ui_Menu4, 255, LV_PART_MAIN | LV_STATE_DEFAULT);
     lv_obj_set_style_text_font(ui_Menu4, &ui_font_OpenSans52, LV_PART_MAIN | LV_STATE_DEFAULT);
 
-    ui_Fondo5 = lv_obj_create(ui_Screen1);
-    lv_obj_set_width(ui_Fondo5, 280);
-    lv_obj_set_height(ui_Fondo5, 109);
-    lv_obj_set_x(ui_Fondo5, 14);
-    lv_obj_set_y(ui_Fondo5, 62);
-    lv_obj_add_flag(ui_Fondo5, LV_OBJ_FLAG_HIDDEN);     /// Flags
-    lv_obj_clear_flag(ui_Fondo5, LV_OBJ_FLAG_SCROLLABLE);      /// Flags
-    lv_obj_set_style_bg_color(ui_Fondo5, lv_color_hex(0xFFFFFF), LV_PART_MAIN | LV_STATE_DEFAULT);
-    lv_obj_set_style_bg_opa(ui_Fondo5, 255, LV_PART_MAIN | LV_STATE_DEFAULT);
+    ui_msgbox = lv_obj_create(ui_Screen1);
+    lv_obj_set_width(ui_msgbox, 280);
+    lv_obj_set_height(ui_msgbox, 109);
+    lv_obj_set_x(ui_msgbox, 14);
+    lv_obj_set_y(ui_msgbox, 62);
+    lv_obj_add_flag(ui_msgbox, LV_OBJ_FLAG_HIDDEN);     /// Flags
+    lv_obj_clear_flag(ui_msgbox, LV_OBJ_FLAG_SCROLLABLE);      /// Flags
+    lv_obj_set_style_bg_color(ui_msgbox, lv_color_hex(0x63A8FF), LV_PART_MAIN | LV_STATE_DEFAULT);
+    lv_obj_set_style_bg_opa(ui_msgbox, 255, LV_PART_MAIN | LV_STATE_DEFAULT);
 
-    ui_Menu5 = lv_label_create(ui_Fondo5);
-    lv_obj_set_width(ui_Menu5, LV_SIZE_CONTENT);   /// 1
-    lv_obj_set_height(ui_Menu5, LV_SIZE_CONTENT);    /// 1
-    lv_obj_set_x(ui_Menu5, -1);
-    lv_obj_set_y(ui_Menu5, -19);
-    lv_label_set_text(ui_Menu5, "2 CIP");
-    lv_obj_set_style_text_color(ui_Menu5, lv_color_hex(0x000000), LV_PART_MAIN | LV_STATE_DEFAULT);
-    lv_obj_set_style_text_opa(ui_Menu5, 255, LV_PART_MAIN | LV_STATE_DEFAULT);
-    lv_obj_set_style_text_font(ui_Menu5, &ui_font_OpenSans52, LV_PART_MAIN | LV_STATE_DEFAULT);
+    ui_msgtxt1 = lv_label_create(ui_msgbox);
+    lv_obj_set_width(ui_msgtxt1, LV_SIZE_CONTENT);   /// 1
+    lv_obj_set_height(ui_msgtxt1, LV_SIZE_CONTENT);    /// 1
+    lv_obj_set_x(ui_msgtxt1, -1);
+    lv_obj_set_y(ui_msgtxt1, 1);
+    lv_label_set_text(ui_msgtxt1, "2 CIP");
+    lv_obj_set_style_text_color(ui_msgtxt1, lv_color_hex(0x000000), LV_PART_MAIN | LV_STATE_DEFAULT);
+    lv_obj_set_style_text_opa(ui_msgtxt1, 255, LV_PART_MAIN | LV_STATE_DEFAULT);
+    lv_obj_set_style_text_font(ui_msgtxt1, &ui_font_OpenSans24, LV_PART_MAIN | LV_STATE_DEFAULT);
+
+    ui_msgtxt2 = lv_label_create(ui_msgbox);
+    lv_obj_set_width(ui_msgtxt2, LV_SIZE_CONTENT);   /// 1
+    lv_obj_set_height(ui_msgtxt2, LV_SIZE_CONTENT);    /// 1
+    lv_obj_set_x(ui_msgtxt2, -2);
+    lv_obj_set_y(ui_msgtxt2, 35);
+    lv_label_set_text(ui_msgtxt2, "2 CIP");
+    lv_obj_set_style_text_color(ui_msgtxt2, lv_color_hex(0x000000), LV_PART_MAIN | LV_STATE_DEFAULT);
+    lv_obj_set_style_text_opa(ui_msgtxt2, 255, LV_PART_MAIN | LV_STATE_DEFAULT);
+    lv_obj_set_style_text_font(ui_msgtxt2, &ui_font_OpenSans24, LV_PART_MAIN | LV_STATE_DEFAULT);
 
     lv_obj_add_event_cb(ui_Screen1, ui_event_Screen1, LV_EVENT_ALL, NULL);
 

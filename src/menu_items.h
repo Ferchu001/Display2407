@@ -38,8 +38,8 @@
 #define TXT_IOT_STATUS 30
 #define TXT_HORA 31
 #define TXT_FECHA 32
-
-#define MNU_TAM_VAR_TXT 33 // OJO *********************************************Modificar este cada vez que se agrega una variable
+#define TXT_HORA_CIP 33
+#define MNU_TAM_VAR_TXT 34 // OJO *********************************************Modificar este cada vez que se agrega una variable
 
 #define SHORT_ELEC_MEMORIA_CIST 0 // puede valer 1,2 o 3 (dependiendo si es compartimento ABC)
 #define SHORT_ELECCION_ORIGEN 1   // idem anterior, pero se usa solo en trasvase para indicar la cisterna de origen
@@ -189,36 +189,19 @@
 #define TIPO_ETIQ 1 // el item es una etiqueta simple que contiene submenu (cuando se le da enter, padre[0]=item_actual)
 // #define TIPO_ETIQ_TITULO    2   //esta etiqueta hace las veces de titulo de menu, se muestra resaltada pero no se permite seleccionarla
 
-#define TIPO_FLOAT_NM_ML 2 // FLOAT, SU=sin unidades, NM=no modificable, ML=misma linea
-#define TIPO_FLOAT_NM_DL 3 // idem, DL= diferente linea (se imprime en el sector para tal motivo)
-#define TIPO_FLOAT_SM_ML 4 // FLOAT, SU=sin unidades, SM=si modificable, ML=misma linea
-#define TIPO_FLOAT_SM_DL 5 // idem, DL= diferente linea (se imprime en el sector para tal motivo)
-#define TIPO_FLOAT_SM_SL 6
-#define TIPO_FLOAT_NM_SL 7
-#define TIPO_FLOAT_NM_SL_CERO 8 // si el numero es < 0 lo muestra como cero (invento para la serenisima)
+#define TIPO_SINGLE_M 5
+#define TIPO_SINGLE_N 6
+#define TIPO_SINGLE_ZN 7
 
-#define TIPO_SINGLE_NM_ML 9   // muestra un single con la cantidad de digitos enteros, y decimales pedidos (en las columnas de hijo y param2 respectivamente)
-#define TIPO_SINGLEZ_NM_ML 10 // idem anterior, pero si el numero es menor que cero lo muestra como cero
-#define TIPO_SINGLE_SM_SL 11  // editable!
+#define TIPO_SHORT_M 13 // idem, DL= diferente linea (se imprime en el sector para tal motivo)
+#define TIPO_SHORT_N 17
 
-#define TIPO_SHORT_NM_ML 12 // SHORT, SU=sin unidades, NM=no modificable, ML=misma linea
-#define TIPO_SHORT_NM_DL 13 // idem, DL= diferente linea (se imprime en el sector para tal motivo)
-#define TIPO_SHORT_SM_ML 14 // SHORT, SU=sin unidades, SM=si modificable, ML=misma linea
-#define TIPO_SHORT_SM_DL 15 // idem, DL= diferente linea (se imprime en el sector para tal motivo)
-// #define TIPO_SHORT_SM_ML_UP 16  //modificable, misma linea, pero es up/down
-#define TIPO_SHORT_SM_SL 16
-#define TIPO_SHORT_NM_SL 17
-
-#define TIPO_TXT_NM_ML 18   // campo de texto NM=no modificable, ML=en la misma linea que la etiqueta
-#define TIPO_TXT_SM_ML 19   // campo de texto SM=si modificable, ML=en la misma linea que la etiqueta
-#define TIPO_TXT_NM_SL 20   // campo de texto NM=no modificable, SL=en la linea siguiente a la de la etiqueta
-#define TIPO_TXT_SM_SL 21   // campo de texto SM=si modificable, SL=en la linea siguiente a la de la etiqueta
-#define TIPO_TXT_NM_DL 22   // campo de texto NM=no modificable, DL=en la linea de datos
-#define TIPO_TXT_SM_DL 23   // campo de texto SM=si modificable, DL=en la linea de datos
+#define TIPO_TXT_M 20
+#define TIPO_TXT_N 21
 #define TIPO_PASSWORD_SL 24 // muestra un campo que es como un campo de texto solo que se muestran ******, el valor valido asociado se guarda en la variable TXT que tiene asociada
 
-#define TIPO_BIT_NM_ML 25 // bit (ON-OFF) se debe indicar en parametro el bit que se quiere modificar de variable_bit
-#define TIPO_BIT_SM_ML 26 // bit (ON-OFF)
+#define TIPO_BIT_N 25 // bit (ON-OFF) se debe indicar en parametro el bit que se quiere modificar de variable_bit
+#define TIPO_BIT_M 26 // bit (ON-OFF)
 
 #define TIPO_ICONO 27 // similar a etiqueta solo que se muestra un icono de 32x32 con scroll horizontal, no se puede mezclar con otro tipo de item en una misma pantalla de menu, como parametro esta la referencia a la tabla de animacion de iconos
 
@@ -230,10 +213,7 @@
 #define TIPO_HORA_NM_SL 32   // campo de hora completa no modificable en la siguiente linea el campo parametro indica la posicion en la matriz de variables fecha que le corresponde
 #define TIPO_FECHA2_NM_SL 33 // muestra solo la fecha (no la hora), no modificable en la siguiente linea
 
-// #define TIPO_FLOAT_SM_ML_CIENTOS 35     //muestra solo multiplos de 100, y la edicion tambien es de multiplos de 100
-#define TIPO_SINGLE_NM_SL 34 // muestra un single con la cantidad de digitos enteros, y decimales pedidos (en las columnas de hijo y param2 respectivamente)
-
-#define TIPO_TXT_SM_SL_ALFA 35
+#define TIPO_TXT_ALFA 35
 
 // #define TIPO_IOT_TXT    36
 #define TIPO_IOT_SHORT 37
@@ -406,7 +386,7 @@
 #define ID_TRASBORDO 220
 #define ID_TAMBO_OBS 225
 
-#define ID_PANTALLA_CARGA 230
+#define ID_PAN_CARGA 230
 #define ID_PAN_IO   231
 
 //#define ID_MAX 12

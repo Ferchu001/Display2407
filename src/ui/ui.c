@@ -22,8 +22,9 @@ lv_obj_t * ui_Fondo3;
 lv_obj_t * ui_Menu3;
 lv_obj_t * ui_Fondo4;
 lv_obj_t * ui_Menu4;
-lv_obj_t * ui_Fondo5;
-lv_obj_t * ui_Menu5;
+lv_obj_t * ui_msgbox;
+lv_obj_t * ui_msgtxt1;
+lv_obj_t * ui_msgtxt2;
 
 
 // SCREEN: ui_Screen2
