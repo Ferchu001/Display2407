@@ -3,6 +3,7 @@
 #include <Arduino.h>
 #include <FS.h>
 #include <SPIFFS.h>
+#include "struct_defines.h"
 
 extern void load_variables(const char* path);
 extern void save_variables(const char* path);

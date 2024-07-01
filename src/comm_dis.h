@@ -4,33 +4,9 @@
 
 #include <Arduino.h>
 #include <ArduinoJson.h>
+#include "struct_defines.h"
 
-// Definir las estructuras de datos
-struct DataOutDis {
-    bool Bomba;
-    bool Pulso_Tomamuestras;
-    bool Sentido_Tomamuestras;
-    bool Valvula;
-    int GPRS;
-    bool LCB_ON;
-    int Impresora;
-    float caudalimetro;
-    int Version;
-};
 
-struct DataInDis {
-    float flow;
-    float volumen;
-    int teclado;
-    float temperatura;
-    float nivel;
-    bool manualAutomatico;
-    bool gprs;
-    bool lcb;
-    bool statusImpresora;
-    bool sensorTension;
-    int Version;
-};
 
 // Declaraciones de las instancias de datos
 extern DataOutDis currentDataOutDis, previousDataOutDis;

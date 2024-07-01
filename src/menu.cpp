@@ -4,6 +4,8 @@
 #include "menu.h"
 #include <Arduino.h>
 #include <ui/ui.h>
+#include "struct_defines.h"
+
 #define CLR_BLACK 0x000000
 #define CLR_WHITE 0xFFFFFF
 void mnu_show(void);
@@ -18,6 +20,9 @@ char mnu_validar_password(char password[]);
 
 void PostMenu(void);
 void PreMenu(void);
+
+void Inicializa_var_tour(void);
+void Inializa_var_Tambo(void);
 
 int mnu_item_actual=0;
 int mnu_item_back=0;
@@ -36,6 +41,12 @@ extern void save_ini_recorrido(void);
 
 extern bool BombaON;
 extern struct msgboxst msgbox;
+
+extern struct reg_cip cip;
+extern struct reg_tour tour;
+extern struct reg_tambo tambo;
+extern struct reg_info info;
+extern struct reg_trasvase trasvase;
 /************************************************************/
 
 void mnu_trae_dato_edit(void);
@@ -145,10 +156,15 @@ for(k=pan_primer_item,j=0;j<MAX_ITEMS_PAN && k<Cant_Items_Nivel ;k++,j++)
                     case TIPO_TXT_ALFA:                
                     case TIPO_HORA_SM_SL:
                     case TIPO_FECHA_SM_SL: 
-                        strncpy(pan_Etiquetas[j+1],variables.vtxt[menu[Items_Nivel[k]].Variable_Asoc],TAM_VAR_TXT - 1);                        
+                        strncpy(pan_Etiquetas[j+1],variables.vtxt[menu[Items_Nivel[k]].Variable_Asoc],TAM_VAR_TXT - 1);
+                        Serial.printf("k: %d\n",k);
+                        Serial.printf("Items_Nivel[k]: %d\n",Items_Nivel[k]);
+                        Serial.printf("variables.vtxt[menu[Items_Nivel[k]].Variable_Asoc] %s\n",variables.vtxt[menu[Items_Nivel[k]].Variable_Asoc]);
                         break;
                     case TIPO_SHORT_M:
                         sprintf(pan_Etiquetas[j+1],"%d",variables.vshort[menu[Items_Nivel[k]].Variable_Asoc]);
+                        Serial.printf("k: %d\n",k);
+                        Serial.printf("variables.vshort[menu[Items_Nivel[k]].Variable_Asoc] %d\n",variables.vshort[menu[Items_Nivel[k]].Variable_Asoc]);
                         break;                    
                     case TIPO_SINGLE_M:
                     case TIPO_SINGLE_N:
@@ -407,6 +423,7 @@ if(menu[mnu_item_actual].Nivel==ID_PAN_IO)
     return;
     }
 if(Tecla>='0' && Tecla<='9' )
+    {
     if(mnu_edicion.item_ON==false && menu[mnu_item_actual].Tipo==TIPO_ETIQ)
         {
         //Busca si tiene tecla rapida        
@@ -536,11 +553,12 @@ if(Tecla>='0' && Tecla<='9' )
                 break;
             }
         }
-
+    }
 switch(Tecla)
     {
     case 'O': //Ok
-    case 'o': //Ok        
+    case 'o': //Ok
+    Serial.println("-------------OK-------------");
     if(mnu_edicion.item_ON==false)
         {
         mnu_trae_dato_edit();
@@ -561,6 +579,8 @@ switch(Tecla)
             case TIPO_TXT_M:
             case TIPO_TXT_ALFA:
                 strncpy(variables.vtxt[menu[mnu_item_actual].Variable_Asoc],mnu_edicion.str_dato,TAM_VAR_TXT-1);
+                Serial.printf("mnu_item_actual: %d\n",mnu_item_actual);
+                Serial.printf("variables.vtxt[menu[mnu_item_actual].Variable_Asoc]: %s\n",variables.vtxt[menu[mnu_item_actual].Variable_Asoc]);
                 break;
             case TIPO_SHORT_M:
                 variables.vshort[menu[mnu_item_actual].Variable_Asoc]=atoi(mnu_edicion.str_dato);
@@ -601,6 +621,18 @@ switch(Tecla)
                 {
                 if(menu[mnu_item_actual].Nivel_Next!=ID_VOID)
                     {
+                    // switch(menu[mnu_item_actual].Post_Proceso)
+                    //     {
+                    //     case POST_INIT_VAR_RECORRIDO:
+                    //         //Variables de recorrido en cero.
+                    //         Serial.println("POST_INIT_VAR_RECORRIDO");
+                    //         Init_tour();
+                    //         break;
+                    //     case POST_START_RECORRIDO:
+                    //         Serial.println("Save Recorrido");                
+                    //         save_ini_recorrido();
+                    //     break;
+                    //     }
                     pan_primer_item=0;//Si no se esta en edicion
                     mnu_cambio_menu(mnu_busca_nextNivel(mnu_item_actual));
                     }
@@ -623,12 +655,11 @@ switch(Tecla)
                 strcpy(mnu_edicion.str_dato,"");                
                 }
             }
-        else
-            strncpy(variables.vtxt[menu[mnu_item_actual].Variable_Asoc],mnu_edicion.str_dato,TAM_VAR_TXT-1);
         }
         break;
-    case 'S': //Stop
+    case 'S': //Stop    
     case 's': //Stop
+    Serial.println("-----------STOP------------");
         if(menu[mnu_item_actual].Nivel==ID_PASSWORD)
             {
             pan_primer_item=0;
@@ -663,7 +694,7 @@ switch(Tecla)
                 save_variables("/parametros.txt");
                 break;
                 case POST_START_RECORRIDO:
-                save_ini_recorrido();
+//                save_ini_recorrido();
                 break;
 
                 }
@@ -718,6 +749,7 @@ switch(Tecla)
         break;
     case 'U': //UP
     case 'u':
+        Serial.println("-----------UP------------");
         if(mnu_edicion.item_ON==true)
             {
             if(menu[mnu_item_actual].Tipo==TIPO_BIT_M)
@@ -739,10 +771,10 @@ switch(Tecla)
                             mnu_edicion.pos_digito++;
                         break;
                     default:
-                        if(++mnu_edicion.pos_digito>=menu[mnu_item_actual].Cant_digitos)
-                            {
-                            mnu_edicion.pos_digito=menu[mnu_item_actual].Cant_digitos-1;                
-                            }
+                        // if(++mnu_edicion.pos_digito>=menu[mnu_item_actual].Cant_digitos)
+                        //     {
+                        //     mnu_edicion.pos_digito=menu[mnu_item_actual].Cant_digitos-1;                
+                        //     }
                         break;
                     }                
                 }
@@ -758,6 +790,7 @@ switch(Tecla)
         break;
     case 'D': //DOWN
     case 'd':        
+        Serial.println("----------------DOWN--------------");
         if(mnu_edicion.item_ON==true)
             {
             if(menu[mnu_item_actual].Tipo==TIPO_BIT_M)
@@ -779,8 +812,8 @@ switch(Tecla)
                             mnu_edicion.pos_digito--;
                         break;
                     default:
-                        if(mnu_edicion.pos_digito>0)
-                            mnu_edicion.pos_digito--;           
+                        // if(mnu_edicion.pos_digito>0)
+                        //     mnu_edicion.pos_digito--;           
                         break;
                     }
                 }
@@ -927,14 +960,14 @@ return -1;
 
 void mnu_cambio_menu(int New_item)
 {
-//Ejecutar Post_Proceso
+mnu_edicion.item_ON=false;
 PostMenu();
 
 mnu_item_actual=New_item;
 //mnu_item_back= mnu_item_actual;
 //pan_primer_item_back=pan_primer_item;
 PreMenu();
-mnu_edicion.item_ON=false;
+
 mnu_show();
 }
 
@@ -943,19 +976,27 @@ char mnu_validar_password(char password[])
 {
 
   if(!strcmp(password,variables.vtxt[TXT_PASSWORD_MEM_1]) || !strcmp(password,PASSWORD_FIX))
-        return 1;
+    return 1;
   else
-      return 0;
+    return 0;
 // mnu_msgbox(MSG_INVALIDO, MNU_MSGBOX_CUALQUIER);
 }
 
 void PostMenu(void)
 {
-/*switch(menu[mnu_item_actual].Post_Proceso)
+switch(menu[mnu_item_actual].Post_Proceso)
     {
-     
-    }
-    */
+    case POST_INIT_VAR_RECORRIDO:
+        //Variables de recorrido en cero.
+        Serial.println("POST_INIT_VAR_RECORRIDO");
+        Inicializa_var_tour();
+        break;
+    case POST_START_RECORRIDO:
+        Serial.println("Save Recorrido");                
+        save_ini_recorrido();
+        
+    break;
+    }    
 }
 
 extern struct Dis Display;
@@ -969,8 +1010,29 @@ switch(menu[mnu_item_actual].Pre_proceso)
         //Display.Actual=2;
         //Display.Change=true;
      break;
+     case PRE_EDIT_ON:
+        mnu_edicion.item_ON=true;
+        mnu_trae_dato_edit();
+        break;
      default:
      break;
     }
 }
 
+void Inicializa_var_tour(void)
+{
+    strcpy(variables.vtxt[TXT_REMITO],"");
+    strcpy(variables.vtxt[TXT_NUM_LINEA],"");
+    strcpy(variables.vtxt[TXT_NRO_REC],"");
+    strcpy(variables.vtxt[TXT_CHOFER],"");
+}
+
+void Inializa_var_Tambo(void)
+{
+    variables.vfloat[FLOAT_CANTIDAD_A]=0.0;
+    variables.vfloat[FLOAT_CANTIDAD_B]=0.0;
+    variables.vfloat[FLOAT_CANTIDAD_C]=0.0;
+    variables.vfloat[FLOAT_TEMP_LECHE_PROMEDIO]=0.0;
+    variables.vfloat[FLOAT_TEMP_MIN_ALCANZADA]=99.9;
+    variables.vfloat[FLOAT_TEMP_MAX_ALCANZADA]=-9.9;
+}

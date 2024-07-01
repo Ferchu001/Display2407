@@ -4,41 +4,19 @@
 #include <menu_items.h>
 #include <constantes.h>
 #include <Arduino.h>
-typedef struct
-{
-    char Etiqueta[20];
-    int Nivel;
-    char Tipo;
-    int Nivel_Next;
-    int Nivel_Back;    
-    char Tecla_Rapida;
-    char Pre_proceso;
-    char Post_Proceso;
-    char Variable_Asoc;
-    char Cant_digitos;
-} MenuItem;
-
-struct msgboxst
-{
-    unsigned long Time;
-    bool visible = false;
-    char text1[18];
-    char text2[18];
-} ;
-struct Dis
-{
-    int Actual = 0;
-    bool Change = false;
-};
+#include "struct_defines.h"
 
 #define PRE_VOID 0
 #define PRE_PAN_CARGA 1
-
+#define PRE_EDIT_ON 250
 
 
 #define POST_VOID 0
 #define POST_SAVE_PARAM 1
-#define POST_START_RECORRIDO 2
+#define POST_INIT_VAR_RECORRIDO 2
+#define POST_START_RECORRIDO 3
+
+
 
 #define VAR_VOID 0
 #define TEC_VOID 255
@@ -47,16 +25,16 @@ struct Dis
 
 const MenuItem menu[] = {
 //    Etiqueta,    		Nivel,          tipo de item,   	Nivel_Next,     	Nivel_Back,    Tecla_Rapida,PreProceso,PostProceso,Variable, CantDigitos,
-	{ET_RECORRIDO, 		ID_PRINCIPAL,	TIPO_ETIQ,      	ID_RECORRIDO_D, 	ID_VOID,       '1',       PRE_VOID,POST_VOID, VAR_VOID, 0},
+	{ET_RECORRIDO, 		ID_PRINCIPAL,	TIPO_ETIQ,      	ID_RECORRIDO_D, 	ID_VOID,       '1',       PRE_VOID,POST_INIT_VAR_RECORRIDO, VAR_VOID, 0},
     {ET_CIP,       		ID_PRINCIPAL,	TIPO_ETIQ,      	ID_CIP,         	ID_VOID,       '2',       PRE_VOID,POST_VOID,VAR_VOID, 0},
 	{ET_CIP_HORA,  		ID_CIP,         TIPO_HORA_SM_SL, 	ID_VOID,       		ID_PRINCIPAL,  TEC_VOID,PRE_VOID,POST_VOID, TXT_HORA_CIP, 0},
     {ET_CIP_TEMP,  		ID_CIP,         TIPO_SINGLE_N,	ID_VOID,       		ID_PRINCIPAL,  TEC_VOID,PRE_VOID,POST_VOID, FLOAT_TEMP_LECHE, 0},
 
-    {ET_REMITO,    		ID_RECORRIDO_D, TIPO_TXT_M, 	ID_NXT_ITEM,    	ID_PRINCIPAL,  TEC_VOID, PRE_VOID,POST_VOID,TXT_REMITO, 16},
-    {ET_NRO_LINEA, 		ID_RECORRIDO_D, TIPO_TXT_M, 	ID_NXT_ITEM,    	ID_PRINCIPAL,  TEC_VOID, PRE_VOID,POST_VOID,TXT_NUM_LINEA, 2},
-    {ET_ACOPLADO,  		ID_RECORRIDO_D, TIPO_TXT_M, 	ID_NXT_ITEM,    	ID_PRINCIPAL,  TEC_VOID, PRE_VOID,POST_VOID,TXT_ACOPLADO, 5},
-    {ET_NRO_REC,   		ID_RECORRIDO_D, TIPO_TXT_M, 	ID_NXT_ITEM,    	ID_PRINCIPAL,  TEC_VOID, PRE_VOID,POST_VOID,TXT_NRO_REC, 16},
-    {ET_CHOFER,    		ID_RECORRIDO_D, TIPO_TXT_M, 	ID_RECORRIDO_I, 	ID_PRINCIPAL,  TEC_VOID, PRE_VOID,POST_START_RECORRIDO,TXT_CHOFER,  16},
+    {ET_REMITO,    		ID_RECORRIDO_D, TIPO_TXT_M, 	ID_NXT_ITEM,    	ID_PRINCIPAL,  TEC_VOID, PRE_EDIT_ON,POST_VOID,TXT_REMITO, 16},
+    {ET_NRO_LINEA, 		ID_RECORRIDO_D, TIPO_TXT_M, 	ID_NXT_ITEM,    	ID_PRINCIPAL,  TEC_VOID, PRE_EDIT_ON,POST_VOID,TXT_NUM_LINEA, 2},
+    {ET_ACOPLADO,  		ID_RECORRIDO_D, TIPO_TXT_M, 	ID_NXT_ITEM,    	ID_PRINCIPAL,  TEC_VOID, PRE_EDIT_ON,POST_VOID,TXT_ACOPLADO, 5},
+    {ET_NRO_REC,   		ID_RECORRIDO_D, TIPO_TXT_M, 	ID_NXT_ITEM,    	ID_PRINCIPAL,  TEC_VOID, PRE_EDIT_ON,POST_VOID,TXT_NRO_REC, 16},
+    {ET_CHOFER,    		ID_RECORRIDO_D, TIPO_TXT_M, 	ID_RECORRIDO_I, 	ID_PRINCIPAL,  TEC_VOID, PRE_EDIT_ON,POST_START_RECORRIDO,TXT_CHOFER,  16},
     
 	{ET_1_RECEPCION, 	ID_RECORRIDO_I,	TIPO_ETIQ, 			ID_TAMBO,       	ID_VOID,        '1',	PRE_VOID,POST_VOID, VAR_VOID, 0},
     {ET_2_TRASVASE, 	ID_RECORRIDO_I,	TIPO_ETIQ, 			ID_TRANS_ORIGEN,       	ID_VOID,        '2',    PRE_VOID,POST_VOID, VAR_VOID, 0},

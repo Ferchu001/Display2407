@@ -182,14 +182,6 @@ const char variables_txt_default[][TAM_VAR_TXT]={
 const long variables_bits_default=0;
 
 
-struct Var{
-int vshort[MNU_TAM_VAR_SHORT];
-signed short viot[MNU_TAM_VAR_SHORT_IOT];
-char vtxt[MNU_TAM_VAR_TXT][TAM_VAR_TXT];
-float vfloat[MNU_TAM_VAR_FLOAT];
-
-long vbit=0x00;
-};
 
 
 #define FECHA_ACTUAL              0   //fecha y hora actual
